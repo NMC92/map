@@ -1,0 +1,160 @@
+path {
+    stroke: black;
+    pointer-events: all;
+}
+
+.Atlantico {
+	fill: none;
+	fill-rule: evenodd;
+	stroke: #ffffff;
+	stroke-width: 0.70566702;
+	stroke-opacity:1
+}
+
+.Concelhos {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.25;
+	stroke-opacity: 1;
+	visibility: hidden;
+}
+
+.Distritos {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.3;
+	stroke-opacity: 1;
+}
+
+.Distritos:hover {
+	fill: red;
+}
+
+.Distritos:active {
+	fill: black;
+}
+
+.Distritos:active + .Concelhos {
+	visibility: block;
+}
+
+.Ilhas {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.25406146;
+	stroke-opacity: 1;
+}
+
+.Ilhas:hover {
+	fill: red;
+}
+
+.Ilhas:active {
+	fill: black;
+}
+/*#VC:active {
+    fill: black;
+    stroke: blue;
+}
+
+#Braga:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#VR:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Braganca:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Porto:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Aveiro:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Viseu:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Guarda:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Coimbra:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#CB:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Leiria:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Santarem:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Portalegre:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Lisboa:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Setubal:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Evora:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Beja:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Faro:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Madeira:hover {
+    fill: red;
+    stroke: blue;
+}
+
+#Acores:hover {
+    fill: red;
+    stroke: blue;
+}
+*/
