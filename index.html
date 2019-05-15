@@ -28,10 +28,13 @@
 					//console.log(Concelhos.length);
 					for(let i = 0; i < Dists.length; i++)
 					{
-						console.log(Dists.item(i).id);
 						Dists.item(i).addEventListener("click", function(el) 
 						{
 							console.log(el.target.id);
+							if(el.target.id === "LISBOA")
+								Concelhos.item(0).style.visibility = "visible";
+							else
+								Concelhos.item(0).style.visibility = "hidden";
 						});
 					}
 			}, 200);

@@ -38,10 +38,6 @@ path {
 	fill: black;
 }
 
-.Distritos:active + .Concelhos {
-	visibility: block;
-}
-
 .Ilhas {
 	fill: #ffefd5;
 	fill-opacity: 1;
@@ -51,13 +47,6 @@ path {
 	stroke-opacity: 1;
 }
 
-.Ilhas:hover {
-	fill: red;
-}
-
-.Ilhas:active {
-	fill: black;
-}
 /*#VC:active {
     fill: black;
     stroke: blue;
