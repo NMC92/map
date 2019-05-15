@@ -27,7 +27,13 @@
 					var Concelhos = svgDoc.getElementsByClassName('Concelhos');
 					//console.log(Concelhos.length);
 					for(let i = 0; i < Dists.length; i++)
+					{
 						console.log(Dists.item(i).id);
+						Dists.item(i).addEventListener("click", function(el) 
+						{
+							console.log(el.target.id);
+						});
+					}
 			}, 200);
 			</script>
 			
