@@ -16,9 +16,13 @@ path {
 	fill-opacity: 1;
 	fill-rule: evenodd;
 	stroke: #a1;
-	stroke-width: 0.25;
+	stroke-width: 0.3;
 	stroke-opacity: 1;
 	visibility: hidden;
+}
+
+.Concelhos:hover {
+	fill: red;
 }
 
 .Distritos {
@@ -26,7 +30,7 @@ path {
 	fill-opacity: 1;
 	fill-rule: evenodd;
 	stroke: #a1;
-	stroke-width: 0.3;
+	stroke-width: 0.4;
 	stroke-opacity: 1;
 }
 
@@ -43,7 +47,7 @@ path {
 	fill-opacity: 1;
 	fill-rule: evenodd;
 	stroke: #a1;
-	stroke-width: 0.25406146;
+	stroke-width: 0.3;
 	stroke-opacity: 1;
 }
 

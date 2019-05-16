@@ -9,32 +9,61 @@
         <title>Portugal</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+		<script src="https://d3js.org/d3.v5.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-		<script src="" async defer></script>
-		<div class="mapdiv">
-			<object class="map" id="svgmap" type="image/svg+xml" data="Distritos.svg">
+		<div class="mapdiv" float="right">
+			<object class="map" id="svgmap" type="image/svg+xml" data="map.svg" display="flex">
 			</object>
+			Hello World!
 			<script>
 				setTimeout(function(){
-					var a = document.getElementById("svgmap");
-					var svgDoc = a.contentDocument;
-					var Dists = svgDoc.getElementsByClassName('Distritos');
-					var Concelhos = svgDoc.getElementsByClassName('Concelhos');
-					//console.log(Concelhos.length);
-					for(let i = 0; i < Dists.length; i++)
+				
+					const a = document.getElementById("svgmap");
+					const svgDoc = a.contentDocument;
+					const Distritos = svgDoc.getElementsByClassName('Distritos');
+					const Concelhos = svgDoc.getElementsByClassName('Concelhos');
+					const Aveiro = svgDoc.getElementsByClassName('Aveiro');
+					const Beja = svgDoc.getElementsByClassName('Beja');
+					const Braga = svgDoc.getElementsByClassName('Braga');
+					const Braganca = svgDoc.getElementsByClassName('Braganca');
+					const CB = svgDoc.getElementsByClassName('CB');
+					const Coimbra = svgDoc.getElementsByClassName('Coimbra');
+					const Evora = svgDoc.getElementsByClassName('Evora');
+					const Faro = svgDoc.getElementsByClassName('Faro');
+					const Guarda = svgDoc.getElementsByClassName('Guarda');
+					const Leiria = svgDoc.getElementsByClassName('Leiria');
+					const Lisboa = svgDoc.getElementsByClassName('Lisboa');
+					const Portalegre = svgDoc.getElementsByClassName('Portalegre');
+					const Porto = svgDoc.getElementsByClassName('Porto');
+					const Santarem = svgDoc.getElementsByClassName('Santarem');
+					const Setubal = svgDoc.getElementsByClassName('Setubal');
+					const VC = svgDoc.getElementsByClassName('VC');
+					const VR = svgDoc.getElementsByClassName('VR');
+					const Viseu = svgDoc.getElementsByClassName('Viseu');
+					
+					
+					for(let i = 0; i < Distritos.length; i++)
 					{
-						Dists.item(i).addEventListener("click", function(el) 
+						Distritos.item(i).addEventListener("click", function(el) 
 						{
 							console.log(el.target.id);
-							if(el.target.id === "LISBOA")
-								Concelhos.item(0).style.visibility = "visible";
-							else
-								Concelhos.item(0).style.visibility = "hidden";
+							//el.target.style.transform = "scale(1.5)";
+							//el.target.style.float = "right";
+							if(el.target.id == 'AVEIRO')
+								for(let i=0; i<Aveiro.length; i++)
+									Aveiro.item(i).style.visibility = "visible";
+							else 
+								for(let i=0; i<Aveiro.length; i++)
+									Aveiro.item(i).style.visibility = "hidden";
+							if(el.target.id == 'LISBOA')
+								for(let i=0; i<Lisboa.length; i++)
+									Lisboa.item(i).style.visibility = Lisboa.item(i).style.visibility == "visible" ? "hidden" : "visible";
+							
 						});
 					}
 			}, 200);
