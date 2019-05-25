@@ -18,11 +18,14 @@ path {
 	stroke: #a1;
 	stroke-width: 0.3;
 	stroke-opacity: 1;
-	visibility: hidden;
 }
 
 .Concelhos:hover {
 	fill: red;
+}
+
+.Concelhos:active {
+	fill: green;
 }
 
 .Distritos {

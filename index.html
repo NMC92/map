@@ -6,69 +6,149 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Portugal</title>
-        <meta name="description" content="">
+		<meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+        <title>Portugal</title>
 		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<script src="https://d3js.org/d3-zoom.v1.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-		<div class="mapdiv" float="right">
-			<object class="map" id="svgmap" type="image/svg+xml" data="map.svg" display="flex">
+		<div class="mapdiv">
+			<object class="map" id="svgmap" type="image/svg+xml" data="map.svg" display="flex" >
 			</object>
-			Hello World!
-			<script>
-				setTimeout(function(){
+		</div>
+		<script>
+			setTimeout(function(){
 				
-					const a = document.getElementById("svgmap");
-					const svgDoc = a.contentDocument;
-					const Distritos = svgDoc.getElementsByClassName('Distritos');
-					const Concelhos = svgDoc.getElementsByClassName('Concelhos');
-					const Aveiro = svgDoc.getElementsByClassName('Aveiro');
-					const Beja = svgDoc.getElementsByClassName('Beja');
-					const Braga = svgDoc.getElementsByClassName('Braga');
-					const Braganca = svgDoc.getElementsByClassName('Braganca');
-					const CB = svgDoc.getElementsByClassName('CB');
-					const Coimbra = svgDoc.getElementsByClassName('Coimbra');
-					const Evora = svgDoc.getElementsByClassName('Evora');
-					const Faro = svgDoc.getElementsByClassName('Faro');
-					const Guarda = svgDoc.getElementsByClassName('Guarda');
-					const Leiria = svgDoc.getElementsByClassName('Leiria');
-					const Lisboa = svgDoc.getElementsByClassName('Lisboa');
-					const Portalegre = svgDoc.getElementsByClassName('Portalegre');
-					const Porto = svgDoc.getElementsByClassName('Porto');
-					const Santarem = svgDoc.getElementsByClassName('Santarem');
-					const Setubal = svgDoc.getElementsByClassName('Setubal');
-					const VC = svgDoc.getElementsByClassName('VC');
-					const VR = svgDoc.getElementsByClassName('VR');
-					const Viseu = svgDoc.getElementsByClassName('Viseu');
+				let selected = 0;
+				const a = document.getElementById("svgmap");
+				const svgDoc = a.contentDocument;
+				const Distritos = svgDoc.getElementsByClassName('Distritos');
+				const Concelhos = svgDoc.getElementsByClassName('Concelhos');
+				const Aveiro = svgDoc.getElementsByClassName('Aveiro');
+				const Beja = svgDoc.getElementsByClassName('Beja');
+				const Braga = svgDoc.getElementsByClassName('Braga');
+				const Braganca = svgDoc.getElementsByClassName('Braganca');
+				const CB = svgDoc.getElementsByClassName('CB');
+				const Coimbra = svgDoc.getElementsByClassName('Coimbra');
+				const Evora = svgDoc.getElementsByClassName('Evora');
+				const Faro = svgDoc.getElementsByClassName('Faro');
+				const Guarda = svgDoc.getElementsByClassName('Guarda');
+				const Leiria = svgDoc.getElementsByClassName('Leiria');
+				const Lisboa = svgDoc.getElementsByClassName('Lisboa');
+				const Portalegre = svgDoc.getElementsByClassName('Portalegre');
+				const Porto = svgDoc.getElementsByClassName('Porto');
+				const Santarem = svgDoc.getElementsByClassName('Santarem');
+				const Setubal = svgDoc.getElementsByClassName('Setubal');
+				const VC = svgDoc.getElementsByClassName('VC');
+				const VR = svgDoc.getElementsByClassName('VR');
+				const Viseu = svgDoc.getElementsByClassName('Viseu');
+				
+				const aveiro = [];
+				const beja = [];
+				const braga = [];
+				const braganca = [];
+				const cb = [];
+				const coimbra = [];
+				const evora = [];
+				const guarda = [];
+				const faro = [];
+				const leiria = [];
+				const lisboa = [];
+				const portalegre = [];
+				const porto = [];
+				const santarem = [];
+				const setubal = [];
+				const vc = [];
+				const vr = [];
+				const viseu = [];
+				
+				for(let i = 0; i < Aveiro.length; i++)
+				{
+					aveiro.push(Aveiro[i].attributes[0].value);
+					Aveiro[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Beja.length; i++)
+				{
+					beja.push(Beja[i].attributes[0].value);
+					Beja[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Lisboa.length; i++)
+				{
+					lisboa.push(Lisboa[i].attributes[0].value);
+					Lisboa[i].attributes[0].value = "";
+				}
+				//let show = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "visible"; };
+				//let hide = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "hidden"; };
 					
-					
-					for(let i = 0; i < Distritos.length; i++)
+				for(let i = 0; i < Distritos.length; i++)
+				{
+					Distritos.item(i).addEventListener("click", function(el) 
 					{
-						Distritos.item(i).addEventListener("click", function(el) 
+						console.log(el.target.id);
+						
+						if(el.target.id == "AVEIRO")
 						{
-							console.log(el.target.id);
-							//el.target.style.transform = "scale(1.5)";
-							//el.target.style.float = "right";
-							if(el.target.id == 'AVEIRO')
-								for(let i=0; i<Aveiro.length; i++)
-									Aveiro.item(i).style.visibility = "visible";
-							else 
-								for(let i=0; i<Aveiro.length; i++)
-									Aveiro.item(i).style.visibility = "hidden";
-							if(el.target.id == 'LISBOA')
-								for(let i=0; i<Lisboa.length; i++)
-									Lisboa.item(i).style.visibility = Lisboa.item(i).style.visibility == "visible" ? "hidden" : "visible";
-							
-						});
-					}
-			}, 200);
-			</script>
-			
-        </div>
+								for(let j = 0; j < Aveiro.length; j++)
+									Aveiro[j].attributes[0].value = aveiro[j];
+							for(let j = 0; j < Aveiro.length; j++)
+							{
+								Aveiro.item(j).addEventListener("click", function(av) 
+								{
+									console.log(av.target.id);
+								});
+							}
+						}
+						else
+						{
+							for(let j = 0; j < Aveiro.length; j++)
+								Aveiro[j].attributes[0].value = "";
+						}
+						
+						if(el.target.id == "LISBOA")
+						{
+								for(let j = 0; j < Lisboa.length; j++)
+									Lisboa[j].attributes[0].value = lisboa[j];
+							for(let j = 0; j < Lisboa.length; j++)
+							{
+								Lisboa.item(j).addEventListener("click", function(lx) 
+								{
+									console.log(lx.target.id);
+								});
+							}
+						}
+						else
+						{
+							for(let j = 0; j < Lisboa.length; j++)
+								Lisboa[j].attributes[0].value = "";
+						}
+						
+						if(el.target.id == "BEJA")
+						{
+								for(let j = 0; j < Beja.length; j++)
+									Beja[j].attributes[0].value = beja[j];
+							for(let j = 0; j < Beja.length; j++)
+							{
+								Beja.item(j).addEventListener("click", function(bj) 
+								{
+									console.log(bj.target.id);
+								});
+							}
+						}
+						else
+						{
+							for(let j = 0; j < Beja.length; j++)
+								Beja[j].attributes[0].value = "";
+						}
+					});
+				}
+					
+			}, 200);			
+		</script>
     </body>
 </html>
