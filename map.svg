@@ -1,6 +1,6 @@
 <?xml-stylesheet type="text/css" href="style.css" ?>
 
-<svg
+<svg 
    xmlns:svgjs="http://svgjs.com/svgjs"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://web.resource.org/cc/"
@@ -13,7 +13,7 @@
    width="250"
    height="366"
    style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
-   viewBox="0 0 250 366.667"
+   viewBox="0 0 250 366"
    id="svg1627"
    sodipodi:version="0.32"
    inkscape:version="0.43"

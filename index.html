@@ -23,6 +23,8 @@
 		<script>
 			setTimeout(function(){
 				
+				const width = 250;
+				const height = 366;
 				const a = document.getElementById("svgmap");
 				const svgDoc = a.contentDocument;
 				const Distritos = svgDoc.getElementsByClassName('Distritos');
@@ -89,18 +91,19 @@
 				{
 					Distritos.item(i).addEventListener("click", function(el) 
 					{
+						let x = el.clientX;
+						let y = el.clientY;
+						
 						console.log(el.target.id);
+						console.log(`X = ${x}\nY = ${y}`);
 						
 						if(el.target.id == "AVEIRO")
 						{
-								for(let j = 0; j < Aveiro.length; j++)
-									Aveiro[j].attributes[0].value = aveiro[j];
+							svgDoc.children[0].setAttribute(`viewBox`, `${128-50} ${102-60} ${width/2.72} ${height/2.72}`);
 							for(let j = 0; j < Aveiro.length; j++)
 							{
-								Aveiro.item(j).addEventListener("click", function(av) 
-								{
-									console.log(av.target.id);
-								});
+								Aveiro[j].attributes[0].value = aveiro[j];
+								Aveiro.item(j).addEventListener("click", av => console.log(av.target.id));
 							}
 						}
 						else
@@ -109,40 +112,34 @@
 								Aveiro[j].attributes[0].value = "";
 						}
 						
-						if(el.target.id == "LISBOA")
-						{
-								for(let j = 0; j < Lisboa.length; j++)
-									Lisboa[j].attributes[0].value = lisboa[j];
-							for(let j = 0; j < Lisboa.length; j++)
-							{
-								Lisboa.item(j).addEventListener("click", function(lx) 
-								{
-									console.log(lx.target.id);
-								});
-							}
-						}
-						else
-						{
-							for(let j = 0; j < Lisboa.length; j++)
-								Lisboa[j].attributes[0].value = "";
-						}
-						
 						if(el.target.id == "BEJA")
 						{
-								for(let j = 0; j < Beja.length; j++)
-									Beja[j].attributes[0].value = beja[j];
+							svgDoc.children[0].setAttribute(`viewBox`, `${155-50} ${303-70} ${width/2.72} ${height/2.72}`);
 							for(let j = 0; j < Beja.length; j++)
 							{
-								Beja.item(j).addEventListener("click", function(bj) 
-								{
-									console.log(bj.target.id);
-								});
+								Beja[j].attributes[0].value = beja[j];
+								Beja.item(j).addEventListener("click", bj => console.log(bj.target.id));
 							}
 						}
 						else
 						{
 							for(let j = 0; j < Beja.length; j++)
 								Beja[j].attributes[0].value = "";
+						}
+						
+						if(el.target.id == "LISBOA")
+						{
+							svgDoc.children[0].setAttribute(`viewBox`, `${88-50} ${223-70} ${width/2.72} ${height/2.72}`);
+							for(let j = 0; j < Lisboa.length; j++)
+							{
+								Lisboa[j].attributes[0].value = lisboa[j];
+								Lisboa.item(j).addEventListener("click", lx => console.log(lx.target.id));
+							}
+						}
+						else
+						{
+							for(let j = 0; j < Lisboa.length; j++)
+								Lisboa[j].attributes[0].value = "";
 						}
 					});
 				}
