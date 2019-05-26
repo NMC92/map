@@ -16,9 +16,10 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-		<div class="mapdiv">
+		<div id="mapdiv">
 			<object class="map" id="svgmap" type="image/svg+xml" data="map.svg" display="flex" >
 			</object>
+			<span id="span"></span>
 		</div>
 		<script>
 			setTimeout(function(){
@@ -55,8 +56,8 @@
 				const cb = [];
 				const coimbra = [];
 				const evora = [];
-				const guarda = [];
 				const faro = [];
+				const guarda = [];
 				const leiria = [];
 				const lisboa = [];
 				const portalegre = [];
@@ -66,6 +67,9 @@
 				const vc = [];
 				const vr = [];
 				const viseu = [];
+				
+				let mapdiv = document.getElementById("mapdiv");
+				let span = document.getElementById("span");
 				
 				for(let i = 0; i < Aveiro.length; i++)
 				{
@@ -94,52 +98,106 @@
 						let x = el.clientX;
 						let y = el.clientY;
 						
-						console.log(el.target.id);
+						span.innerHTML = el.target.id;
+						
 						console.log(`X = ${x}\nY = ${y}`);
 						
-						if(el.target.id == "AVEIRO")
+						function clean()
 						{
-							svgDoc.children[0].setAttribute(`viewBox`, `${128-50} ${102-60} ${width/2.72} ${height/2.72}`);
-							for(let j = 0; j < Aveiro.length; j++)
-							{
-								Aveiro[j].attributes[0].value = aveiro[j];
-								Aveiro.item(j).addEventListener("click", av => console.log(av.target.id));
-							}
-						}
-						else
-						{
-							for(let j = 0; j < Aveiro.length; j++)
-								Aveiro[j].attributes[0].value = "";
+							for(let i = 0; i < Aveiro.length; i++)
+								Aveiro[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Beja.length; i++)
+								Beja[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Braga.length; i++)
+								Braga[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Braganca.length; i++)
+								Braganca[i].attributes[0].value = "";
+								
+							for(let i = 0; i < CB.length; i++)
+								CB[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Coimbra.length; i++)
+								Coimbra[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Evora.length; i++)
+								Evora[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Faro.length; i++)
+								Faro[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Guarda.length; i++)
+								Guarda[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Leiria.length; i++)
+								Leiria[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Lisboa.length; i++)
+								Lisboa[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Portalegre.length; i++)
+								Portalegre[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Porto.length; i++)
+								Porto[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Santarem.length; i++)
+								Santarem[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Setubal.length; i++)
+								Setubal[i].attributes[0].value = "";
+								
+							for(let i = 0; i < VC.length; i++)
+								VC[i].attributes[0].value = "";
+								
+							for(let i = 0; i < VR.length; i++)
+								VR[i].attributes[0].value = "";
+								
+							for(let i = 0; i < Viseu.length; i++)
+								Viseu[i].attributes[0].value = "";
 						}
 						
-						if(el.target.id == "BEJA")
+						switch(el.target.id) 
 						{
-							svgDoc.children[0].setAttribute(`viewBox`, `${155-50} ${303-70} ${width/2.72} ${height/2.72}`);
-							for(let j = 0; j < Beja.length; j++)
+							case('AVEIRO') : 
 							{
-								Beja[j].attributes[0].value = beja[j];
-								Beja.item(j).addEventListener("click", bj => console.log(bj.target.id));
+								clean();
+								svgDoc.children[0].setAttribute(`viewBox`, `${128-50} ${102-60} ${width/2.72} ${height/2.72}`);
+								for(let j = 0; j < Aveiro.length; j++)
+								{
+									Aveiro[j].attributes[0].value = aveiro[j];
+									Aveiro.item(j).addEventListener("click", av => span.innerHTML = av.target.id);
+								}
+								break;
 							}
-						}
-						else
-						{
-							for(let j = 0; j < Beja.length; j++)
-								Beja[j].attributes[0].value = "";
-						}
-						
-						if(el.target.id == "LISBOA")
-						{
-							svgDoc.children[0].setAttribute(`viewBox`, `${88-50} ${223-70} ${width/2.72} ${height/2.72}`);
-							for(let j = 0; j < Lisboa.length; j++)
+							
+							case('BEJA') : 
 							{
-								Lisboa[j].attributes[0].value = lisboa[j];
-								Lisboa.item(j).addEventListener("click", lx => console.log(lx.target.id));
+								clean(Concelhos);
+								svgDoc.children[0].setAttribute(`viewBox`, `${155-50} ${303-70} ${width/2.72} ${height/2.72}`);
+								for(let j = 0; j < Beja.length; j++)
+								{
+									Beja[j].attributes[0].value = beja[j];
+									Beja.item(j).addEventListener("click", bj => span.innerHTML = bj.target.id);
+								}
+								break;
 							}
-						}
-						else
-						{
-							for(let j = 0; j < Lisboa.length; j++)
-								Lisboa[j].attributes[0].value = "";
+							
+							case('LISBOA') : 
+							{
+								clean();
+								svgDoc.children[0].setAttribute(`viewBox`, `${88-50} ${223-70} ${width/2.72} ${height/2.72}`);
+								for(let j = 0; j < Lisboa.length; j++)
+								{
+									Lisboa[j].attributes[0].value = lisboa[j];
+									Lisboa.item(j).addEventListener("click", lx => span.innerHTML = lx.target.id);
+								}
+								break;
+							}
+							
+							default : { clean(); svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`); }
 						}
 					});
 				}
