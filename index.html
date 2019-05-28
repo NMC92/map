@@ -83,6 +83,30 @@
 					Beja[i].attributes[0].value = "";
 				}
 				
+				for(let i = 0; i < Braga.length; i++)
+				{
+					braga.push(Braga[i].attributes[0].value);
+					Braga[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Braganca.length; i++)
+				{
+					braganca.push(Braganca[i].attributes[0].value);
+					Braganca[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < CB.length; i++)
+				{
+					cb.push(CB[i].attributes[0].value);
+					CB[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Coimbra.length; i++)
+				{
+					coimbra.push(Coimbra[i].attributes[0].value);
+					Coimbra[i].attributes[0].value = "";
+				}
+				
 				for(let i = 0; i < Lisboa.length; i++)
 				{
 					lisboa.push(Lisboa[i].attributes[0].value);
@@ -175,12 +199,60 @@
 							
 							case('BEJA') : 
 							{
-								clean(Concelhos);
+								clean();
 								svgDoc.children[0].setAttribute(`viewBox`, `${155-50} ${303-70} ${width/2.72} ${height/2.72}`);
 								for(let j = 0; j < Beja.length; j++)
 								{
 									Beja[j].attributes[0].value = beja[j];
 									Beja.item(j).addEventListener("click", bj => span.innerHTML = bj.target.id);
+								}
+								break;
+							}
+							
+							case('BRAGA') : 
+							{
+								clean();
+								svgDoc.children[0].setAttribute(`viewBox`, `${136-50} ${47-70} ${width/2.72} ${height/2.72}`);
+								for(let j = 0; j < Braga.length; j++)
+								{
+									Braga[j].attributes[0].value = braga[j];
+									Braga.item(j).addEventListener("click", br => span.innerHTML = br.target.id);
+								}
+								break;
+							}
+							
+							case('BRAGANÇA') : 
+							{
+								clean();
+								svgDoc.children[0].setAttribute(`viewBox`, `${213-50} ${49-70} ${width/2.72} ${height/2.72}`);
+								for(let j = 0; j < Braganca.length; j++)
+								{
+									Braganca[j].attributes[0].value = braganca[j];
+									Braganca.item(j).addEventListener("click", brag => span.innerHTML = brag.target.id);
+								}
+								break;
+							}
+							
+							case('CASTELO BRANCO') : 
+							{
+								clean();
+								svgDoc.children[0].setAttribute(`viewBox`, `${180-50} ${157-70} ${width/2.72} ${height/2.72}`);
+								for(let j = 0; j < CB.length; j++)
+								{
+									CB[j].attributes[0].value = cb[j];
+									CB.item(j).addEventListener("click", cbran => span.innerHTML = cbran.target.id);
+								}
+								break;
+							}
+							
+							case('COIMBRA') : 
+							{
+								clean();
+								svgDoc.children[0].setAttribute(`viewBox`, `${138-50} ${141-70} ${width/2.72} ${height/2.72}`);
+								for(let j = 0; j < Coimbra.length; j++)
+								{
+									Coimbra[j].attributes[0].value = coimbra[j];
+									Coimbra.item(j).addEventListener("click", coi => span.innerHTML = coi.target.id);
 								}
 								break;
 							}
