@@ -20,6 +20,7 @@
 			<object class="map" id="svgmap" type="image/svg+xml" data="map.svg" display="flex" >
 			</object>
 			<span id="span"></span>
+			<button type="button" id="reset" >Reset</button>
 		</div>
 		<script>
 			setTimeout(function(){
@@ -68,8 +69,9 @@
 				const vr = [];
 				const viseu = [];
 				
-				let mapdiv = document.getElementById("mapdiv");
-				let span = document.getElementById("span");
+				const mapdiv = document.getElementById("mapdiv");
+				const span = document.getElementById("span");
+				const btn = document.getElementById("reset");
 				
 				for(let i = 0; i < Aveiro.length; i++)
 				{
@@ -246,6 +248,12 @@
 							for(let i = 0; i < Viseu.length; i++)
 								Viseu[i].attributes[0].value = "";
 						}
+						
+						btn.addEventListener("click", () => { 
+							clean(); 
+							span.innerHTML = ""; 
+							svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`);
+						}); 
 						
 						switch(el.target.id) 
 						{
