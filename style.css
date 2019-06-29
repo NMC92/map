@@ -11,6 +11,23 @@ path {
 	stroke-opacity:1
 }
 
+.Freguesias {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.2;
+	stroke-opacity: 1;
+}
+
+.Freguesias:hover {
+	fill: red;
+}
+
+.Freguesias:active {
+	fill: blue;
+}
+
 .Concelhos {
 	fill: #ffefd5;
 	fill-opacity: 1;
