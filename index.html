@@ -68,9 +68,27 @@
 				const vr = [];
 				const viseu = [];
 				
+				const Amafreg = svgDoc.getElementsByClassName("amafreg");
+				const Azafreg = svgDoc.getElementsByClassName("azafreg");
+				const Cascfreg = svgDoc.getElementsByClassName("cascfreg");
 				const Lisfreg = svgDoc.getElementsByClassName("lisfreg");
+				const Lourfreg = svgDoc.getElementsByClassName("lourfreg");
+				const Maffreg = svgDoc.getElementsByClassName("maffreg");
+				const Odifreg = svgDoc.getElementsByClassName("odifreg");
+				const Oeirfreg = svgDoc.getElementsByClassName("oeirfreg");
+				const Sintfreg = svgDoc.getElementsByClassName("sintfreg");
+				const Vfxfreg = svgDoc.getElementsByClassName("vfxfreg");
 				
+				const amafreg = [];
+				const azafreg = [];
+				const cascfreg = [];					
 				const lisfreg = [];
+				const lourfreg = [];
+				const maffreg = [];
+				const odifreg = [];
+				const oeirfreg = [];
+				const sintfreg = [];
+				const vfxfreg = [];
 				
 				const span = document.getElementById("span");
 				const btn = document.getElementById("reset");
@@ -81,7 +99,7 @@
 				let x = Math.floor((Math.random() * Concelhos.length)+1);
 				let goal = Concelhos[x].id;
 				let guess = "";
-				let tries = 3;
+				let tries = 999999;
 				let lose = false;
 				let game = false;
 						
@@ -193,20 +211,75 @@
 					Viseu[i].attributes[0].value = "";
 				}
 				
+				for(let i = 0; i < Amafreg.length; i++)
+				{
+					amafreg.push(Amafreg[i].attributes[0].value);
+					Amafreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Azafreg.length; i++)
+				{
+					azafreg.push(Azafreg[i].attributes[0].value);
+					Azafreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Cascfreg.length; i++)
+				{
+					cascfreg.push(Cascfreg[i].attributes[0].value);
+					Cascfreg[i].attributes[0].value = "";
+				}
+				
 				for(let i = 0; i < Lisfreg.length; i++)
 				{
 					lisfreg.push(Lisfreg[i].attributes[0].value);
 					Lisfreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Lourfreg.length; i++)
+				{
+					lourfreg.push(Lourfreg[i].attributes[0].value);
+					Lourfreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Maffreg.length; i++)
+				{
+					maffreg.push(Maffreg[i].attributes[0].value);
+					Maffreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Odifreg.length; i++)
+				{
+					odifreg.push(Odifreg[i].attributes[0].value);
+					Odifreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Oeirfreg.length; i++)
+				{
+					oeirfreg.push(Oeirfreg[i].attributes[0].value);
+					Oeirfreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Sintfreg.length; i++)
+				{
+					sintfreg.push(Sintfreg[i].attributes[0].value);
+					Sintfreg[i].attributes[0].value = "";
+				}
+				for(let i = 0; i < Vfxfreg.length; i++)
+				{
+					vfxfreg.push(Vfxfreg[i].attributes[0].value);
+					Vfxfreg[i].attributes[0].value = "";
 				}
 				//let show = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "visible"; };
 				//let hide = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "hidden"; };
 				
 				function answer(a, b){ return (a === b); }
 				
-				function clean()
+				function cleanConcelhos()
 				{
+					cleanFreguesias();
 					for(let i = 0; i < Aveiro.length; i++)
 						Aveiro[i].attributes[0].value = "";
+					
 						
 					for(let i = 0; i < Beja.length; i++)
 						Beja[i].attributes[0].value = "";
@@ -236,8 +309,9 @@
 						Leiria[i].attributes[0].value = "";
 									
 					for(let i = 0; i < Lisboa.length; i++)
+					{
 						Lisboa[i].attributes[0].value = "";
-									
+					}				
 					for(let i = 0; i < Portalegre.length; i++)
 						Portalegre[i].attributes[0].value = "";
 									
@@ -258,29 +332,72 @@
 									
 					for(let i = 0; i < Viseu.length; i++)
 						Viseu[i].attributes[0].value = "";
-						
-					for(let i = 0; i < Lisfreg.length; i++)
-						Lisfreg[i].attributes[0].value = "";
 				}
-							
+				
+				function cleanFreguesias()
+				{
+					for(let i = 0; i < Amafreg.length; i++)
+					{
+						Amafreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Azafreg.length; i++)
+					{
+						Azafreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Cascfreg.length; i++)
+					{
+						Cascfreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Lisfreg.length; i++)
+					{	
+						Lisfreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Lourfreg.length; i++)
+					{	
+						Lourfreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Maffreg.length; i++)
+					{	
+						Maffreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Odifreg.length; i++)
+					{	
+						Odifreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Oeirfreg.length; i++)
+					{	
+						Oeirfreg[i].attributes[0].value = "";
+					}
+				    for(let i = 0; i < Sintfreg.length; i++)
+					{	
+						Sintfreg[i].attributes[0].value = "";
+					}
+					
+					for(let i = 0; i < Vfxfreg.length; i++)
+					{	
+						Vfxfreg[i].attributes[0].value = "";
+					}
+				}
+				
 				btn.addEventListener("click", reset); 
 							
 				function reset() 
 				{ 
-					clean();
+					cleanConcelhos();
 					btn.style.visibility="hidden";
+					span.innerHTML = "";
 					//span.innerHTML = `Where is ${goal}?`; 
-					if(game) 
+					//if(game) 
 						svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`);
-					else
+					/*else
 					{
 						tries = 3
 						x = Math.floor((Math.random() * 278)+1);
 						goal = Concelhos[x].id;
 						svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`);
 						span.innerHTML = `Where is ${goal}?`;
-						game = true;
-					}
+						//game = true;
+					}*/
 				}
 				function showDists()
 				{		
@@ -296,10 +413,11 @@
 							
 							switch(el.target.id) 
 							{
-								case('AVEIRO') : 
+								case('Aveiro(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${128-50} ${102-60} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Aveiro.length; j++)
 									{
 										Aveiro[j].attributes[0].value = aveiro[j];
@@ -331,10 +449,11 @@
 									break;
 								}
 								
-								case('BEJA') : 
+								case('Beja(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${155-50} ${303-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Beja.length; j++)
 									{
 										Beja[j].attributes[0].value = beja[j];
@@ -366,10 +485,11 @@
 									break;
 								}
 								
-								case('BRAGA') : 
+								case('Braga(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${136-50} ${47-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Braga.length; j++)
 									{
 										Braga[j].attributes[0].value = braga[j];
@@ -401,10 +521,11 @@
 									break;
 								}
 								
-								case('BRAGANÇA') : 
+								case('Bragança(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${213-50} ${49-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Braganca.length; j++)
 									{
 										Braganca[j].attributes[0].value = braganca[j];
@@ -436,10 +557,11 @@
 									break;
 								}
 								
-								case('CASTELO BRANCO') : 
+								case('Castelo Branco(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${180-50} ${157-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < CB.length; j++)
 									{
 										CB[j].attributes[0].value = cb[j];
@@ -471,10 +593,11 @@
 									break;
 								}
 								
-								case('COIMBRA') : 
+								case('Coimbra(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${138-50} ${141-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Coimbra.length; j++)
 									{
 										Coimbra[j].attributes[0].value = coimbra[j];
@@ -506,10 +629,11 @@
 									break;
 								}
 								
-								case('EVORA') : 
+								case('Évora(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${164-50} ${249-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Evora.length; j++)
 									{
 										Evora[j].attributes[0].value = evora[j];
@@ -541,10 +665,11 @@
 									break;
 								}
 								
-								case('FARO') : 
+								case('Faro(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${144-50} ${345-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Faro.length; j++)
 									{
 										Faro[j].attributes[0].value = faro[j];
@@ -576,10 +701,11 @@
 									break;
 								}
 								
-								case('GUARDA') : 
+								case('Guarda(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${194-50} ${103-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Guarda.length; j++)
 									{
 										Guarda[j].attributes[0].value = guarda[j];
@@ -611,10 +737,11 @@
 									break;
 								}
 								
-								case('LEIRIA') : 
+								case('Leiria(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${112-50} ${174-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Leiria.length; j++)
 									{
 										Leiria[j].attributes[0].value = leiria[j];
@@ -645,18 +772,56 @@
 									break;
 								}
 								
-								case('LISBOA') : 
+								case('Lisboa(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${88-50} ${223-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Lisboa.length; j++)
 									{
 										Lisboa[j].attributes[0].value = lisboa[j];
 										Lisboa.item(j).addEventListener("click", lx =>
 										{
 											//console.log(`X = ${x}.\nY = ${y}.`);
-											if(lx.target.id==="Lisboa")
+											if(lx.target.id==="Amadora")
 											{
+												//lx.target.style.fill = "Black";
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${78} ${217+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Amafreg.length; k++)
+												{
+													Amafreg[k].attributes[0].value = amafreg[k];
+													Amafreg[k].addEventListener("click", amdfreg => span.innerHTML = amdfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Azambuja")
+											{
+												//lx.target.style.fill = "Black";
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${96} ${191+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Azafreg.length; k++)
+												{
+													Azafreg[k].attributes[0].value = azafreg[k];
+													Azafreg[k].addEventListener("click", azfreg => span.innerHTML = azfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Cascais")
+											{
+												//lx.target.style.fill = "Black";
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${70} ${217+13} ${width/15} ${height/15}`);
+												for(let k = 0; k < Cascfreg.length; k++)
+												{
+													Cascfreg[k].attributes[0].value = cascfreg[k];
+													Cascfreg[k].addEventListener("click", cscfreg => span.innerHTML = cscfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Lisboa(Concelho)")
+											{
+												cleanFreguesias();
 												svgDoc.children[0].setAttribute(`viewBox`, `${83} ${217+10} ${width/15} ${height/15}`);
 												for(let k = 0; k < Lisfreg.length; k++)
 												{
@@ -664,7 +829,71 @@
 													Lisfreg[k].addEventListener("click", lfreg => span.innerHTML = lfreg.target.id);
 												}
 											}
+											
+											if(lx.target.id==="Loures")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${83} ${212+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Lourfreg.length; k++)
+												{
+													Lourfreg[k].attributes[0].value = lourfreg[k];
+													Lourfreg[k].addEventListener("click", lrfreg => span.innerHTML = lrfreg.target.id);
+												}
+											}
+											
+											
+											if(lx.target.id==="Mafra")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${75} ${202+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Maffreg.length; k++)
+												{
+													Maffreg[k].attributes[0].value = maffreg[k];
+													Maffreg[k].addEventListener("click", mffreg => span.innerHTML = mffreg.target.id);
+												}
+											}
+											if(lx.target.id==="Odivelas")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${80} ${217+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Odifreg.length; k++)
+												{
+													Odifreg[k].attributes[0].value = odifreg[k];
+													Odifreg[k].addEventListener("click", odfreg => span.innerHTML = odfreg.target.id);
+												}
+											}
+											if(lx.target.id==="Oeiras")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${76} ${217+15} ${width/15} ${height/15}`);
+												for(let k = 0; k < Oeirfreg.length; k++)
+												{
+													Oeirfreg[k].attributes[0].value = oeirfreg[k];
+													Oeirfreg[k].addEventListener("click", oeifreg => span.innerHTML = oeifreg.target.id);
+												}
+											}
 												
+											if(lx.target.id==="Sintra")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${73} ${210+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Sintfreg.length; k++)
+												{
+													Sintfreg[k].attributes[0].value = sintfreg[k];
+													Sintfreg[k].addEventListener("click", sntfreg => span.innerHTML = sntfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Vila Franca de Xira")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${73+18} ${210+8} ${width/15} ${height/15}`);
+												for(let k = 0; k < Vfxfreg.length; k++)
+												{
+													Vfxfreg[k].attributes[0].value = vfxfreg[k];
+													Vfxfreg[k].addEventListener("click", vffreg => span.innerHTML = vffreg.target.id);
+												}
+											}	
 											/*if(game)
 											{
 												if(answer(lx.target.id, goal))
@@ -692,10 +921,11 @@
 									break;
 								}
 								
-								case('PORTALEGRE') : 
+								case('Portalegre(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${174-50} ${204-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Portalegre.length; j++)
 									{
 										Portalegre[j].attributes[0].value = portalegre[j];
@@ -727,10 +957,11 @@
 									break;
 								}
 								
-								case('PORTO') : 
+								case('Porto(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${134-50} ${70-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Porto.length; j++)
 									{
 										Porto[j].attributes[0].value = porto[j];
@@ -762,10 +993,11 @@
 									break;
 								}
 								
-								case('SANTAREM') : 
+								case('Santarém(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${126-50} ${204-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Santarem.length; j++)
 									{
 										Santarem[j].attributes[0].value = santarem[j];
@@ -797,10 +1029,11 @@
 									break;
 								}
 								
-								case('SETUBAL') : 
+								case('Setúbal(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${120-50} ${270-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Setubal.length; j++)
 									{
 										Setubal[j].attributes[0].value = setubal[j];
@@ -832,10 +1065,11 @@
 									break;
 								}
 								
-								case('VIANA DO CASTELO') : 
+								case('Viana do Castelo(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${129-50} ${23-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < VC.length; j++)
 									{
 										VC[j].attributes[0].value = vc[j];
@@ -867,10 +1101,11 @@
 									break;
 								}
 								
-								case('VILA REAL') : 
+								case('Vila Real(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${173-50} ${46-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < VR.length; j++)
 									{
 										VR[j].attributes[0].value = vr[j];
@@ -902,10 +1137,11 @@
 									break;
 								}
 								
-								case('VISEU') : 
+								case('Viseu(Distrito)') : 
 								{
-									clean();
+									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${162-50} ${100-70} ${width/2.72} ${height/2.72}`);
+									span.innerHTML = el.target.id;
 									for(let j = 0; j < Viseu.length; j++)
 									{
 										Viseu[j].attributes[0].value = viseu[j];
@@ -946,13 +1182,13 @@
 				play.addEventListener("click", () => 
 				{
 						play.style.visibility="hidden";
-						x = Math.floor((Math.random() * 278)+1);
+						/*x = Math.floor((Math.random() * 278)+1);
 						goal = Concelhos[x].id;
 						span.innerHTML = `Where is ${goal}?`;
 						guess = "";
 						tries = 3;
-						game = true;
-						lose = false;
+						game = false;
+						lose = false;*/
 						showDists();
 				});
 				
