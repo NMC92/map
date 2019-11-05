@@ -68,26 +68,38 @@
 				const vr = [];
 				const viseu = [];
 				
+				const Alenqfreg = svgDoc.getElementsByClassName("alenqfreg");
 				const Amafreg = svgDoc.getElementsByClassName("amafreg");
+				const Arrufreg = svgDoc.getElementsByClassName("arrufreg");
 				const Azafreg = svgDoc.getElementsByClassName("azafreg");
 				const Cascfreg = svgDoc.getElementsByClassName("cascfreg");
+				const Cadafreg = svgDoc.getElementsByClassName("cadafreg");
 				const Lisfreg = svgDoc.getElementsByClassName("lisfreg");
 				const Lourfreg = svgDoc.getElementsByClassName("lourfreg");
+				const Lourifreg = svgDoc.getElementsByClassName("lourifreg");
 				const Maffreg = svgDoc.getElementsByClassName("maffreg");
 				const Odifreg = svgDoc.getElementsByClassName("odifreg");
 				const Oeirfreg = svgDoc.getElementsByClassName("oeirfreg");
+				const Sobrfreg = svgDoc.getElementsByClassName("sobrfreg");
 				const Sintfreg = svgDoc.getElementsByClassName("sintfreg");
+				const Tvfreg = svgDoc.getElementsByClassName("tvfreg");
 				const Vfxfreg = svgDoc.getElementsByClassName("vfxfreg");
 				
+				const alenqfreg = [];
 				const amafreg = [];
+				const arrufreg = [];
 				const azafreg = [];
+				const cadafreg = [];
 				const cascfreg = [];					
 				const lisfreg = [];
 				const lourfreg = [];
+				const lourifreg = [];
 				const maffreg = [];
 				const odifreg = [];
 				const oeirfreg = [];
 				const sintfreg = [];
+				const sobrfreg = [];
+				const tvfreg = [];
 				const vfxfreg = [];
 				
 				const span = document.getElementById("span");
@@ -97,7 +109,7 @@
 				btn.style.visibility="hidden";
 				
 				let x = Math.floor((Math.random() * Concelhos.length)+1);
-				let goal = Concelhos[x].id;
+				//let goal = Concelhos[x].id;
 				let guess = "";
 				let tries = 999999;
 				let lose = false;
@@ -211,10 +223,22 @@
 					Viseu[i].attributes[0].value = "";
 				}
 				
+				for(let i = 0; i < Alenqfreg.length; i++)
+				{
+					alenqfreg.push(Alenqfreg[i].attributes[0].value);
+					Alenqfreg[i].attributes[0].value = "";
+				}
+				
 				for(let i = 0; i < Amafreg.length; i++)
 				{
 					amafreg.push(Amafreg[i].attributes[0].value);
 					Amafreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Arrufreg.length; i++)
+				{
+					arrufreg.push(Arrufreg[i].attributes[0].value);
+					Arrufreg[i].attributes[0].value = "";
 				}
 				
 				for(let i = 0; i < Azafreg.length; i++)
@@ -229,6 +253,12 @@
 					Cascfreg[i].attributes[0].value = "";
 				}
 				
+				for(let i = 0; i < Cadafreg.length; i++)
+				{
+					cadafreg.push(Cadafreg[i].attributes[0].value);
+					Cadafreg[i].attributes[0].value = "";
+				}
+				
 				for(let i = 0; i < Lisfreg.length; i++)
 				{
 					lisfreg.push(Lisfreg[i].attributes[0].value);
@@ -239,6 +269,12 @@
 				{
 					lourfreg.push(Lourfreg[i].attributes[0].value);
 					Lourfreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Lourifreg.length; i++)
+				{
+					lourifreg.push(Lourifreg[i].attributes[0].value);
+					Lourifreg[i].attributes[0].value = "";
 				}
 				
 				for(let i = 0; i < Maffreg.length; i++)
@@ -264,11 +300,25 @@
 					sintfreg.push(Sintfreg[i].attributes[0].value);
 					Sintfreg[i].attributes[0].value = "";
 				}
+				
+				for(let i = 0; i < Sobrfreg.length; i++)
+				{
+					sobrfreg.push(Sobrfreg[i].attributes[0].value);
+					Sobrfreg[i].attributes[0].value = "";
+				}
+				
+				for(let i = 0; i < Tvfreg.length; i++)
+				{
+					tvfreg.push(Tvfreg[i].attributes[0].value);
+					Tvfreg[i].attributes[0].value = "";
+				}
+				
 				for(let i = 0; i < Vfxfreg.length; i++)
 				{
 					vfxfreg.push(Vfxfreg[i].attributes[0].value);
 					Vfxfreg[i].attributes[0].value = "";
 				}
+				
 				//let show = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "visible"; };
 				//let hide = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "hidden"; };
 				
@@ -336,13 +386,25 @@
 				
 				function cleanFreguesias()
 				{
+					for(let i = 0; i < Alenqfreg.length; i++)
+					{
+						Alenqfreg[i].attributes[0].value = "";
+					}
 					for(let i = 0; i < Amafreg.length; i++)
 					{
 						Amafreg[i].attributes[0].value = "";
 					}
+					for(let i = 0; i < Arrufreg.length; i++)
+					{
+						Arrufreg[i].attributes[0].value = "";
+					}
 					for(let i = 0; i < Azafreg.length; i++)
 					{
 						Azafreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Cadafreg.length; i++)
+					{
+						Cadafreg[i].attributes[0].value = "";
 					}
 					for(let i = 0; i < Cascfreg.length; i++)
 					{
@@ -355,6 +417,10 @@
 					for(let i = 0; i < Lourfreg.length; i++)
 					{	
 						Lourfreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Lourifreg.length; i++)
+					{	
+						Lourifreg[i].attributes[0].value = "";
 					}
 					for(let i = 0; i < Maffreg.length; i++)
 					{	
@@ -372,7 +438,14 @@
 					{	
 						Sintfreg[i].attributes[0].value = "";
 					}
-					
+					for(let i = 0; i < Sobrfreg.length; i++)
+					{	
+						Sobrfreg[i].attributes[0].value = "";
+					}
+					for(let i = 0; i < Tvfreg.length; i++)
+					{	
+						Tvfreg[i].attributes[0].value = "";
+					}
 					for(let i = 0; i < Vfxfreg.length; i++)
 					{	
 						Vfxfreg[i].attributes[0].value = "";
@@ -783,7 +856,20 @@
 										Lisboa.item(j).addEventListener("click", lx =>
 										{
 											//console.log(`X = ${x}.\nY = ${y}.`);
-											if(lx.target.id==="Amadora")
+											
+											if(lx.target.id==="Alenquer(Concelho)")
+											{
+												//lx.target.style.fill = "Black";
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${90} ${195+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Alenqfreg.length; k++)
+												{
+													Alenqfreg[k].attributes[0].value = alenqfreg[k];
+													Alenqfreg[k].addEventListener("click", alnqfreg => span.innerHTML = alnqfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Amadora(Concelho)")
 											{
 												//lx.target.style.fill = "Black";
 												cleanFreguesias();
@@ -795,7 +881,19 @@
 												}
 											}
 											
-											if(lx.target.id==="Azambuja")
+											if(lx.target.id==="Arruda dos Vinhos(Concelho)")
+											{
+												//lx.target.style.fill = "Black";
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${84} ${204+10} ${width/15} ${height/15}`);
+												for(let k = 0; k < Arrufreg.length; k++)
+												{
+													Arrufreg[k].attributes[0].value = arrufreg[k];
+													Arrufreg[k].addEventListener("click", arvfreg => span.innerHTML = arvfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Azambuja(Concelho)")
 											{
 												//lx.target.style.fill = "Black";
 												cleanFreguesias();
@@ -807,7 +905,19 @@
 												}
 											}
 											
-											if(lx.target.id==="Cascais")
+											if(lx.target.id==="Cadaval(Concelho)")
+											{
+												//lx.target.style.fill = "Black";
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${87} ${195} ${width/15} ${height/15}`);
+												for(let k = 0; k < Cadafreg.length; k++)
+												{
+													Cadafreg[k].attributes[0].value = cadafreg[k];
+													Cadafreg[k].addEventListener("click", cdvfreg => span.innerHTML = cdvfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Cascais(Concelho)")
 											{
 												//lx.target.style.fill = "Black";
 												cleanFreguesias();
@@ -830,7 +940,7 @@
 												}
 											}
 											
-											if(lx.target.id==="Loures")
+											if(lx.target.id==="Loures(Concelho)")
 											{
 												cleanFreguesias();
 												svgDoc.children[0].setAttribute(`viewBox`, `${83} ${212+10} ${width/15} ${height/15}`);
@@ -841,8 +951,18 @@
 												}
 											}
 											
+											if(lx.target.id==="Lourinhã(Concelho)")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${80} ${195} ${width/15} ${height/15}`);
+												for(let k = 0; k < Lourifreg.length; k++)
+												{
+													Lourifreg[k].attributes[0].value = lourifreg[k];
+													Lourifreg[k].addEventListener("click", lrifreg => span.innerHTML = lrifreg.target.id);
+												}
+											}
 											
-											if(lx.target.id==="Mafra")
+											if(lx.target.id==="Mafra(Concelho)")
 											{
 												cleanFreguesias();
 												svgDoc.children[0].setAttribute(`viewBox`, `${75} ${202+10} ${width/15} ${height/15}`);
@@ -852,7 +972,8 @@
 													Maffreg[k].addEventListener("click", mffreg => span.innerHTML = mffreg.target.id);
 												}
 											}
-											if(lx.target.id==="Odivelas")
+											
+											if(lx.target.id==="Odivelas(Concelho)")
 											{
 												cleanFreguesias();
 												svgDoc.children[0].setAttribute(`viewBox`, `${80} ${217+10} ${width/15} ${height/15}`);
@@ -862,7 +983,8 @@
 													Odifreg[k].addEventListener("click", odfreg => span.innerHTML = odfreg.target.id);
 												}
 											}
-											if(lx.target.id==="Oeiras")
+											
+											if(lx.target.id==="Oeiras(Concelho)")
 											{
 												cleanFreguesias();
 												svgDoc.children[0].setAttribute(`viewBox`, `${76} ${217+15} ${width/15} ${height/15}`);
@@ -873,7 +995,7 @@
 												}
 											}
 												
-											if(lx.target.id==="Sintra")
+											if(lx.target.id==="Sintra(Concelho)")
 											{
 												cleanFreguesias();
 												svgDoc.children[0].setAttribute(`viewBox`, `${73} ${210+10} ${width/15} ${height/15}`);
@@ -884,7 +1006,29 @@
 												}
 											}
 											
-											if(lx.target.id==="Vila Franca de Xira")
+											if(lx.target.id==="Sobral de Monte Agraço(Concelho)")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${83} ${212} ${width/15} ${height/15}`);
+												for(let k = 0; k < Sobrfreg.length; k++)
+												{
+													Sobrfreg[k].attributes[0].value = sobrfreg[k];
+													Sobrfreg[k].addEventListener("click", smafreg => span.innerHTML = smafreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Torres Vedras(Concelho)")
+											{
+												cleanFreguesias();
+												svgDoc.children[0].setAttribute(`viewBox`, `${59+18} ${195+8} ${width/15} ${height/15}`);
+												for(let k = 0; k < Tvfreg.length; k++)
+												{
+													Tvfreg[k].attributes[0].value = tvfreg[k];
+													Tvfreg[k].addEventListener("click", tvedfreg => span.innerHTML = tvedfreg.target.id);
+												}
+											}
+											
+											if(lx.target.id==="Vila Franca de Xira(Concelho)")
 											{
 												cleanFreguesias();
 												svgDoc.children[0].setAttribute(`viewBox`, `${73+18} ${210+8} ${width/15} ${height/15}`);
@@ -894,6 +1038,7 @@
 													Vfxfreg[k].addEventListener("click", vffreg => span.innerHTML = vffreg.target.id);
 												}
 											}	
+											
 											/*if(game)
 											{
 												if(answer(lx.target.id, goal))
