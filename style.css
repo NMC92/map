@@ -21,7 +21,7 @@ path {
 }
 
 .Freguesias:hover {
-	fill: red;
+	fill: yellow;
 }
 
 .Freguesias:active {
@@ -38,7 +38,7 @@ path {
 }
 
 .Concelhos:hover {
-	fill: red;
+	fill: orange;
 }
 
 .Concelhos:active {

@@ -30,85 +30,48 @@
 				const svgDoc = a.contentDocument;
 				const Distritos = svgDoc.getElementsByClassName('Distritos');
 				const Concelhos = svgDoc.getElementsByClassName('Concelhos');
-				const Aveiro = svgDoc.getElementsByClassName('Aveiro');
-				const Beja = svgDoc.getElementsByClassName('Beja');
-				const Braga = svgDoc.getElementsByClassName('Braga');
-				const Braganca = svgDoc.getElementsByClassName('Braganca');
-				const CB = svgDoc.getElementsByClassName('CB');
-				const Coimbra = svgDoc.getElementsByClassName('Coimbra');
-				const Evora = svgDoc.getElementsByClassName('Evora');
-				const Faro = svgDoc.getElementsByClassName('Faro');
-				const Guarda = svgDoc.getElementsByClassName('Guarda');
-				const Leiria = svgDoc.getElementsByClassName('Leiria');
-				const Lisboa = svgDoc.getElementsByClassName('Lisboa');
-				const Portalegre = svgDoc.getElementsByClassName('Portalegre');
-				const Porto = svgDoc.getElementsByClassName('Porto');
-				const Santarem = svgDoc.getElementsByClassName('Santarem');
-				const Setubal = svgDoc.getElementsByClassName('Setubal');
-				const VC = svgDoc.getElementsByClassName('VC');
-				const VR = svgDoc.getElementsByClassName('VR');
-				const Viseu = svgDoc.getElementsByClassName('Viseu');
+
 				
-				const aveiro = [];
-				const beja = [];
-				const braga = [];
-				const braganca = [];
-				const cb = [];
-				const coimbra = [];
-				const evora = [];
-				const faro = [];
-				const guarda = [];
-				const leiria = [];
-				const lisboa = [];
-				const portalegre = [];
-				const porto = [];
-				const santarem = [];
-				const setubal = [];
-				const vc = [];
-				const vr = [];
-				const viseu = [];
-				//LEI
-				const Alcobfreg = svgDoc.getElementsByClassName("alcobfreg");
-				const alcobfreg = [];
-				const Nazafreg = svgDoc.getElementsByClassName("nazafreg");
-				const nazafreg = [];
-				const Obidfreg = svgDoc.getElementsByClassName("obidfreg");
-				const obidfreg = [];
-				const Penifreg = svgDoc.getElementsByClassName("penifreg");
-				const penifreg = [];
-				//LX
-				const Alenqfreg = svgDoc.getElementsByClassName("alenqfreg");
-				const alenqfreg = [];
-				const Amafreg = svgDoc.getElementsByClassName("amafreg");
-				const amafreg = [];
-				const Arrufreg = svgDoc.getElementsByClassName("arrufreg");
-				const arrufreg = [];
-				const Azafreg = svgDoc.getElementsByClassName("azafreg");
-				const azafreg = [];
-				const Cadafreg = svgDoc.getElementsByClassName("cadafreg");
-				const cadafreg = [];
-				const Cascfreg = svgDoc.getElementsByClassName("cascfreg");
-				const cascfreg = [];
-				const Lisfreg = svgDoc.getElementsByClassName("lisfreg");
-				const lisfreg = [];
-				const Lourfreg = svgDoc.getElementsByClassName("lourfreg");
-				const lourfreg = [];
-				const Lourifreg = svgDoc.getElementsByClassName("lourifreg");
-				const lourifreg = [];
-				const Maffreg = svgDoc.getElementsByClassName("maffreg");
-				const maffreg = [];
-				const Odifreg = svgDoc.getElementsByClassName("odifreg");
-				const odifreg = [];
-				const Oeirfreg = svgDoc.getElementsByClassName("oeirfreg");
-				const oeirfreg = [];
-				const Sintfreg = svgDoc.getElementsByClassName("sintfreg");
-				const sintfreg = [];
-				const Sobrfreg = svgDoc.getElementsByClassName("sobrfreg");
-				const sobrfreg = [];
-				const Tvfreg = svgDoc.getElementsByClassName("tvfreg");
-				const tvfreg = [];
-				const Vfxfreg = svgDoc.getElementsByClassName("vfxfreg");
-				const vfxfreg = [];
+				let dists = new Array();
+				let concs = new Array();
+				let fregs = new Array();
+				let dd = new Array();
+				let dc = new Array();
+				let df = new Array();
+				
+				for(let i = 0; i < Distritos.length; i++)
+				{
+					let strAux = Distritos[i].id.split('(')[0];
+					strAux = strAux == "Bragança" ? "Braganca" : strAux;
+					strAux = strAux == "Castelo Branco" ? "CB" : strAux;
+					strAux = strAux == "Évora" ? "Evora" : strAux;
+					strAux = strAux == "Santarém" ? "Santarem" : strAux;
+					strAux = strAux == "Setúbal" ? "Setubal" : strAux;
+					strAux = strAux == "Viana do Castelo" ? "VC" : strAux;
+					strAux = strAux == "Vila Real" ? "VR" : strAux;
+					for(let j = 0; j < svgDoc.getElementsByClassName(strAux).length; j++)
+					{   
+						test = svgDoc.getElementsByClassName(strAux)[j].id;
+						test = test.replace(/ +/g, "");
+						test = test.toLowerCase();
+						test = test.split('(')[0]+"freg";
+						for(let k = 0; k < svgDoc.getElementsByClassName(test).length; k++)
+						{
+							fregs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Distrito:Distritos[i].id.split('(')[0],Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Freguesia:svgDoc.getElementsByClassName(test)[k]});
+						}
+						concs.push({Name:svgDoc.getElementsByClassName(strAux)[j].id,Distrito:Distritos[i].id.split('(')[0],Concelho:svgDoc.getElementsByClassName(strAux)[j],Freguesias:svgDoc.getElementsByClassName(test)});
+					}
+					dists.push({Name:Distritos[i].id,Distrito:Distritos[i],Concelhos:svgDoc.getElementsByClassName(strAux),Freguesias:svgDoc.getElementsByClassName("freg"+strAux.toLowerCase())});
+				};
+				for(let i = 0; i < dists.length; i++)
+					dd.push({Path:dists[i].Distrito.attributes[0].value,Id:Distritos[i].id});
+				for(let i = 0; i < concs.length; i++)
+					dc.push({Path:concs[i].Concelho.attributes[0].value,Id:concs[i].Name}); 
+				for(let i = 0; i < fregs.length; i++)
+				{
+					
+					df.push({Path:fregs[i].Freguesia.attributes[0].value,Id:fregs[i].Name});
+				}
 				
 				const span = document.getElementById("span");
 				const btn = document.getElementById("reset");
@@ -123,381 +86,33 @@
 				let lose = false;
 				let game = false;
 						
-				for(let i = 0; i < Aveiro.length; i++)
-				{
-					aveiro.push(Aveiro[i].attributes[0].value);
-					Aveiro[i].attributes[0].value = "";
-				}
+				//for(let i = 0; i < dists.length; i++)
+					//dists[i].Distrito.attributes[0].value = "";
+				for(let i = 0; i < concs.length; i++)
+					concs[i].Concelho.attributes[0].value = "";
+				for(let i = 0; i < fregs.length; i++)
+					fregs[i].Freguesia.attributes[0].value = "";
 				
-				for(let i = 0; i < Beja.length; i++)
-				{
-					beja.push(Beja[i].attributes[0].value);
-					Beja[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Braga.length; i++)
-				{
-					braga.push(Braga[i].attributes[0].value);
-					Braga[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Braganca.length; i++)
-				{
-					braganca.push(Braganca[i].attributes[0].value);
-					Braganca[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < CB.length; i++)
-				{
-					cb.push(CB[i].attributes[0].value);
-					CB[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Coimbra.length; i++)
-				{
-					coimbra.push(Coimbra[i].attributes[0].value);
-					Coimbra[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Evora.length; i++)
-				{
-					evora.push(Evora[i].attributes[0].value);
-					Evora[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Faro.length; i++)
-				{
-					faro.push(Faro[i].attributes[0].value);
-					Faro[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Guarda.length; i++)
-				{
-					guarda.push(Guarda[i].attributes[0].value);
-					Guarda[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Leiria.length; i++)
-				{
-					leiria.push(Leiria[i].attributes[0].value);
-					Leiria[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Lisboa.length; i++)
-				{
-					lisboa.push(Lisboa[i].attributes[0].value);
-					Lisboa[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Portalegre.length; i++)
-				{
-					portalegre.push(Portalegre[i].attributes[0].value);
-					Portalegre[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Porto.length; i++)
-				{
-					porto.push(Porto[i].attributes[0].value);
-					Porto[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Santarem.length; i++)
-				{
-					santarem.push(Santarem[i].attributes[0].value);
-					Santarem[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Setubal.length; i++)
-				{
-					setubal.push(Setubal[i].attributes[0].value);
-					Setubal[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < VC.length; i++)
-				{
-					vc.push(VC[i].attributes[0].value);
-					VC[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < VR.length; i++)
-				{
-					vr.push(VR[i].attributes[0].value);
-					VR[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Viseu.length; i++)
-				{
-					viseu.push(Viseu[i].attributes[0].value);
-					Viseu[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Alcobfreg.length; i++)
-				{
-					alcobfreg.push(Alcobfreg[i].attributes[0].value);
-					Alcobfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Nazafreg.length; i++)
-				{
-					nazafreg.push(Nazafreg[i].attributes[0].value);
-					Nazafreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Obidfreg.length; i++)
-				{
-					obidfreg.push(Obidfreg[i].attributes[0].value);
-					Obidfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Penifreg.length; i++)
-				{
-					penifreg.push(Penifreg[i].attributes[0].value);
-					Penifreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Alenqfreg.length; i++)
-				{
-					alenqfreg.push(Alenqfreg[i].attributes[0].value);
-					Alenqfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Amafreg.length; i++)
-				{
-					amafreg.push(Amafreg[i].attributes[0].value);
-					Amafreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Arrufreg.length; i++)
-				{
-					arrufreg.push(Arrufreg[i].attributes[0].value);
-					Arrufreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Azafreg.length; i++)
-				{
-					azafreg.push(Azafreg[i].attributes[0].value);
-					Azafreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Cascfreg.length; i++)
-				{
-					cascfreg.push(Cascfreg[i].attributes[0].value);
-					Cascfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Cadafreg.length; i++)
-				{
-					cadafreg.push(Cadafreg[i].attributes[0].value);
-					Cadafreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Lisfreg.length; i++)
-				{
-					lisfreg.push(Lisfreg[i].attributes[0].value);
-					Lisfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Lourfreg.length; i++)
-				{
-					lourfreg.push(Lourfreg[i].attributes[0].value);
-					Lourfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Lourifreg.length; i++)
-				{
-					lourifreg.push(Lourifreg[i].attributes[0].value);
-					Lourifreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Maffreg.length; i++)
-				{
-					maffreg.push(Maffreg[i].attributes[0].value);
-					Maffreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Odifreg.length; i++)
-				{
-					odifreg.push(Odifreg[i].attributes[0].value);
-					Odifreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Oeirfreg.length; i++)
-				{
-					oeirfreg.push(Oeirfreg[i].attributes[0].value);
-					Oeirfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Sintfreg.length; i++)
-				{
-					sintfreg.push(Sintfreg[i].attributes[0].value);
-					Sintfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Sobrfreg.length; i++)
-				{
-					sobrfreg.push(Sobrfreg[i].attributes[0].value);
-					Sobrfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Tvfreg.length; i++)
-				{
-					tvfreg.push(Tvfreg[i].attributes[0].value);
-					Tvfreg[i].attributes[0].value = "";
-				}
-				
-				for(let i = 0; i < Vfxfreg.length; i++)
-				{
-					vfxfreg.push(Vfxfreg[i].attributes[0].value);
-					Vfxfreg[i].attributes[0].value = "";
-				}
 				
 				//let show = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "visible"; };
 				//let hide = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "hidden"; };
 				
 				function answer(a, b){ return (a === b); }
+				function bigger(a, b){ return (a >= b ? a : b); }
+				function smaller(a, b){ return (a < b ? a : b); }
 				
 				function cleanConcelhos()
 				{
 					cleanFreguesias();
-					for(let i = 0; i < Aveiro.length; i++)
-						Aveiro[i].attributes[0].value = "";
-					
-						
-					for(let i = 0; i < Beja.length; i++)
-						Beja[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Braga.length; i++)
-						Braga[i].attributes[0].value = "";
-						
-					for(let i = 0; i < Braganca.length; i++)
-						Braganca[i].attributes[0].value = "";
-									
-					for(let i = 0; i < CB.length; i++)
-						CB[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Coimbra.length; i++)
-						Coimbra[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Evora.length; i++)
-						Evora[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Faro.length; i++)
-						Faro[i].attributes[0].value = "";
-								
-					for(let i = 0; i < Guarda.length; i++)
-						Guarda[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Leiria.length; i++)
-						Leiria[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Lisboa.length; i++)
-					{
-						Lisboa[i].attributes[0].value = "";
-					}				
-					for(let i = 0; i < Portalegre.length; i++)
-						Portalegre[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Porto.length; i++)
-						Porto[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Santarem.length; i++)
-						Santarem[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Setubal.length; i++)
-						Setubal[i].attributes[0].value = "";
-									
-					for(let i = 0; i < VC.length; i++)
-						VC[i].attributes[0].value = "";
-									
-					for(let i = 0; i < VR.length; i++)
-						VR[i].attributes[0].value = "";
-									
-					for(let i = 0; i < Viseu.length; i++)
-						Viseu[i].attributes[0].value = "";
+					for(let i = 0; i < dists.length; i++)
+						for(let j = 0; j < dists[i].Concelhos.length; j++)
+							dists[i].Concelhos[j].attributes[0].value = "";
 				}
 				
 				function cleanFreguesias()
 				{
-					for(let i = 0; i < Alcobfreg.length; i++)
-					{
-						Alcobfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Nazafreg.length; i++)
-					{
-						Nazafreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Obidfreg.length; i++)
-					{
-						Obidfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Penifreg.length; i++)
-					{
-						Penifreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Alenqfreg.length; i++)
-					{
-						Alenqfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Amafreg.length; i++)
-					{
-						Amafreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Arrufreg.length; i++)
-					{
-						Arrufreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Azafreg.length; i++)
-					{
-						Azafreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Cadafreg.length; i++)
-					{
-						Cadafreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Cascfreg.length; i++)
-					{
-						Cascfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Lisfreg.length; i++)
-					{	
-						Lisfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Lourfreg.length; i++)
-					{	
-						Lourfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Lourifreg.length; i++)
-					{	
-						Lourifreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Maffreg.length; i++)
-					{	
-						Maffreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Odifreg.length; i++)
-					{	
-						Odifreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Oeirfreg.length; i++)
-					{	
-						Oeirfreg[i].attributes[0].value = "";
-					}
-				    for(let i = 0; i < Sintfreg.length; i++)
-					{	
-						Sintfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Sobrfreg.length; i++)
-					{	
-						Sobrfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Tvfreg.length; i++)
-					{	
-						Tvfreg[i].attributes[0].value = "";
-					}
-					for(let i = 0; i < Vfxfreg.length; i++)
-					{	
-						Vfxfreg[i].attributes[0].value = "";
-					}
+					for(let i = 0; i < fregs.length; i++)
+						fregs[i].Freguesia.attributes[0].value = ""
 				}
 				
 				btn.addEventListener("click", reset); 
@@ -522,41 +137,43 @@
 				}
 				function showDists()
 				{		
-					for(let i = 0; i < Distritos.length; i++)
+					for(let i = 0; i < dists.length; i++)
 					{
-						Distritos.item(i).addEventListener("click", function(el) 
+						dists[i].Distrito.addEventListener("click", function(el) 
 						{
 							btn.style.visibility="visible";
 							let x = el.clientX;
 							let y = el.clientY;
 							
 							//span.innerHTML = el.target.id;
-							
-							switch(el.target.id) 
-							{
-								case('Aveiro(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${128-50} ${102-60} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Aveiro.length; j++)
+							//console.log(i);
+							cleanConcelhos();
+									let tgt = el.target.getBBox();
+									
+									if(i !== 1 && i != 4 && i != 6 && i !== 7)
 									{
-										Aveiro[j].attributes[0].value = aveiro[j];
-										Aveiro.item(j).addEventListener("click", av => 
+										svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-35} ${tgt.y-45} ${width/2.5} ${height/2.5}`);
+									}else
+										svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-08} ${tgt.y-40} ${width/2.25} ${height/2.25}`);
+									span.innerHTML = el.target.id;
+									for(let j = 0; j < dists[i].Concelhos.length; j++)
+									{
+										dists[i].Concelhos[j].attributes[0].value = dc.find(x => x.Id === dists[i].Concelhos[j].id).Path;
+										dists[i].Concelhos[j].addEventListener("click", el2 => 
 										{
-											if(game)
+											/*if(game)
 											{
-												if(answer(av.target.id, goal))
+												if(answer(el2.target.id, goal))
 												{
 													tries = 3
 													game=false;
-													span.innerHTML = `Win(${av.target.id})!`;
+													span.innerHTML = `Win(${el2.target.id})!`;
 													btn.style.visibility="visible";
 												}
 												else
 												{
 													tries--;
-													span.innerHTML = `Wrong(${av.target.id})! Lives = ${tries}.`;
+													span.innerHTML = `Wrong(${el2.target.id})! Lives = ${tries}.`;
 													if(tries <= 0)
 													{
 														game=false;
@@ -564,301 +181,24 @@
 													}
 												}
 											}
-											else span.innerHTML = av.target.id;
+											else */
+											let tgt2 = el2.target.getBBox();
+											let z = 200 / (tgt2.width + tgt2.height);
+											svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((width/z)/2)} ${width/z} ${height/z}`);
+											span.innerHTML = el2.target.id;
+											cleanFreguesias();
+											for(k = 0; k < concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias.length; k++)
+											{
+												concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].attributes[0].value = df.find(x => x.Id === concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].id).Path;
+												concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].addEventListener("click", el3 =>
+												{
+													span.innerHTML = el3.target.id;
+												});
+											}
 										})
-									}
-									break;
 								}
 								
-								case('Beja(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${155-50} ${303-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Beja.length; j++)
-									{
-										Beja[j].attributes[0].value = beja[j];
-										Beja.item(j).addEventListener("click", bj => 
-										{
-											if(game)
-											{
-												if(answer(bj.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${bj.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${bj.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = bj.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Braga(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${136-50} ${47-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Braga.length; j++)
-									{
-										Braga[j].attributes[0].value = braga[j];
-										Braga.item(j).addEventListener("click", br => 
-										{
-											if(game)
-											{
-												if(answer(br.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${br.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${br.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = br.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Bragança(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${213-50} ${49-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Braganca.length; j++)
-									{
-										Braganca[j].attributes[0].value = braganca[j];
-										Braganca.item(j).addEventListener("click", brgn => 
-										{
-											if(game)
-											{
-												if(answer(brgn.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${brgn.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${brgn.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = brgn.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Castelo Branco(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${180-50} ${157-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < CB.length; j++)
-									{
-										CB[j].attributes[0].value = cb[j];
-										CB.item(j).addEventListener("click", cbran => 
-										{
-											if(game)
-											{
-												if(answer(cbran.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${cbran.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${cbran.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = cbran.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Coimbra(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${138-50} ${141-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Coimbra.length; j++)
-									{
-										Coimbra[j].attributes[0].value = coimbra[j];
-										Coimbra.item(j).addEventListener("click", coi => 
-										{
-											if(game)
-											{
-												if(answer(coi.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${coi.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${coi.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = coi.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Évora(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${164-50} ${249-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Evora.length; j++)
-									{
-										Evora[j].attributes[0].value = evora[j];
-										Evora.item(j).addEventListener("click", ev =>
-										{
-											if(game)
-											{
-												if(answer(ev.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${ev.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${ev.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = ev.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Faro(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${144-50} ${345-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Faro.length; j++)
-									{
-										Faro[j].attributes[0].value = faro[j];
-										Faro.item(j).addEventListener("click", far =>
-										{
-											if(game)
-											{
-												if(answer(far.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${far.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${far.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = far.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Guarda(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${194-50} ${103-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Guarda.length; j++)
-									{
-										Guarda[j].attributes[0].value = guarda[j];
-										Guarda.item(j).addEventListener("click", grd =>
-										{
-											if(game)
-											{
-												if(answer(grd.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${grd.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${grd.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = grd.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Leiria(Distrito)') : 
+								/*case('Leiria(Distrito)') : 
 								{
 									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${112-50} ${174-70} ${width/2.72} ${height/2.72}`);
@@ -919,9 +259,9 @@
 										});
 									}
 									break;
-								}
+								}*/
 								
-								case('Lisboa(Distrito)') : 
+								/*case('Lisboa(Distrito)') : 
 								{
 									cleanConcelhos();
 									svgDoc.children[0].setAttribute(`viewBox`, `${88-50} ${223-70} ${width/2.72} ${height/2.72}`);
@@ -1127,7 +467,7 @@
 												}
 											}	
 											
-											/*if(game)
+											if(game)
 											{
 												if(answer(lx.target.id, goal))
 												{
@@ -1147,267 +487,12 @@
 													}
 												}
 											}
-											else span.innerHTML = lx.target.id;*/
+											else span.innerHTML = lx.target.id;
 											span.innerHTML = lx.target.id;
 										});
 									}
 									break;
-								}
-								
-								case('Portalegre(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${174-50} ${204-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Portalegre.length; j++)
-									{
-										Portalegre[j].attributes[0].value = portalegre[j];
-										Portalegre.item(j).addEventListener("click", pa =>
-										{
-											if(game)
-											{
-												if(answer(pa.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${pa.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${pa.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = pa.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Porto(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${134-50} ${70-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Porto.length; j++)
-									{
-										Porto[j].attributes[0].value = porto[j];
-										Porto.item(j).addEventListener("click", prt =>
-										{
-											if(game)
-											{
-												if(answer(prt.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${prt.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${prt.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = prt.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Santarém(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${126-50} ${204-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Santarem.length; j++)
-									{
-										Santarem[j].attributes[0].value = santarem[j];
-										Santarem.item(j).addEventListener("click", san =>
-										{
-											if(game)
-											{
-												if(answer(san.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${san.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${san.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = san.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Setúbal(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${120-50} ${270-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Setubal.length; j++)
-									{
-										Setubal[j].attributes[0].value = setubal[j];
-										Setubal.item(j).addEventListener("click", set =>
-										{
-											if(game)
-											{
-												if(answer(set.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${set.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${set.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = set.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Viana do Castelo(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${129-50} ${23-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < VC.length; j++)
-									{
-										VC[j].attributes[0].value = vc[j];
-										VC.item(j).addEventListener("click", vcast =>
-										{
-											if(game)
-											{
-												if(answer(vcast.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${vcast.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${vcast.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = vcast.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Vila Real(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${173-50} ${46-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < VR.length; j++)
-									{
-										VR[j].attributes[0].value = vr[j];
-										VR.item(j).addEventListener("click", vreal =>
-										{
-											if(game)
-											{
-												if(answer(vreal.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${vreal.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${vreal.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = vreal.target.id;
-										});
-									}
-									break;
-								}
-								
-								case('Viseu(Distrito)') : 
-								{
-									cleanConcelhos();
-									svgDoc.children[0].setAttribute(`viewBox`, `${162-50} ${100-70} ${width/2.72} ${height/2.72}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < Viseu.length; j++)
-									{
-										Viseu[j].attributes[0].value = viseu[j];
-										Viseu.item(j).addEventListener("click", vis =>
-										{
-											if(game)
-											{
-												if(answer(vis.target.id, goal))
-												{
-													game=false;
-													span.innerHTML = `Win(${vis.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${vis.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else span.innerHTML = vis.target.id;
-										});
-									}
-									break;
-								}
-								
-								default : 
-									//Supposedly never happens...
-							}
+								}*/
 						});
 					}
 				}
