@@ -61,12 +61,3 @@ path {
 .Distritos:active {
 	fill: black;
 }
-
-.Ilhas {
-	fill: #ffefd5;
-	fill-opacity: 1;
-	fill-rule: evenodd;
-	stroke: #a1;
-	stroke-width: 0.3;
-	stroke-opacity: 1;
-}

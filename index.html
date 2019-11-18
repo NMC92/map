@@ -80,20 +80,14 @@
 				let x = Math.floor((Math.random() * Concelhos.length)+1);
 				//let goal = Concelhos[x].id;
 				let guess = "";
-				let tries = 999999;
+				let tries = 99999999;
 				let lose = false;
 				let game = false;
 						
-				//for(let i = 0; i < dists.length; i++)
-					//dists[i].Distrito.attributes[0].value = "";
 				for(let i = 0; i < concs.length; i++)
 					concs[i].Concelho.attributes[0].value = "";
 				for(let i = 0; i < fregs.length; i++)
 					fregs[i].Freguesia.attributes[0].value = "";
-				
-				
-				//let show = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "visible"; };
-				//let hide = arr =>  {for(let i = 0; i < arr.length; i++) arr.item(i).style.visibility = "hidden"; };
 				
 				function answer(a, b){ return (a === b); }
 				function bigger(a, b){ return (a >= b ? a : b); }
@@ -180,7 +174,7 @@
 											else */
 											let tgt2 = el2.target.getBBox();
 											let z = 200 / (tgt2.width + tgt2.height);
-											svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((width/z)/2)} ${width/z} ${height/z}`);
+											svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
 											span.innerHTML = el2.target.id;
 											cleanFreguesias();
 											for(k = 0; k < concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias.length; k++)
@@ -191,7 +185,7 @@
 													span.innerHTML = el3.target.id;
 												});
 											}
-										})
+										});
 								}
 						});
 					}
@@ -210,7 +204,7 @@
 						showDists();
 				});
 				
-				var conc = Array.prototype.slice.call( Concelhos, 0 );
+				//var conc = Array.prototype.slice.call( Concelhos, 0 );
 				//conc.sort((a, b) => (a.id > b.id) ? 1 : -1)
 				//foreach(conc) console.log(conc.id);
 			}, 500);			
