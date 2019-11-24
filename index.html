@@ -139,12 +139,8 @@
 							
 							cleanConcelhos();
 									let tgt = el.target.getBBox();
-									
-									if(i !== 1 && i != 4 && i != 6 && i !== 7)
-									{
-										svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-35} ${tgt.y-45} ${width/2.5} ${height/2.5}`);
-									}else
-										svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-08} ${tgt.y-40} ${width/2.25} ${height/2.25}`);
+									let z = 180 / (tgt.width + tgt.height);
+									svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-((width/z)/2)} ${tgt.y-((height/z)/2)} ${width/z} ${height/z}`);
 									span.innerHTML = el.target.id;
 									for(let j = 0; j < dists[i].Concelhos.length; j++)
 									{
