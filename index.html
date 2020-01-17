@@ -28,6 +28,7 @@
 				const height = 366;
 				const a = document.getElementById("svgmap");
 				const svgDoc = a.contentDocument;
+				let Portugal = svgDoc.getElementsByClassName('País');
 				const Distritos = svgDoc.getElementsByClassName('Distritos');
 				const Concelhos = svgDoc.getElementsByClassName('Concelhos');
 				let dists = new Array();
@@ -61,6 +62,7 @@
 					}
 					dists.push({Name:Distritos[i].id,Distrito:Distritos[i],Concelhos:svgDoc.getElementsByClassName(strAux),Freguesias:svgDoc.getElementsByClassName("freg"+strAux.toLowerCase())});
 				};
+				
 				for(let i = 0; i < dists.length; i++)
 					dd.push({Path:dists[i].Distrito.attributes[0].value,Id:Distritos[i].id});
 				for(let i = 0; i < concs.length; i++)
@@ -83,7 +85,9 @@
 				let tries = 99999999;
 				let lose = false;
 				let game = false;
-						
+				
+				for(let i = 0; i < dists.length; i++)
+					dists[i].Distrito.attributes[0].value = "";
 				for(let i = 0; i < concs.length; i++)
 					concs[i].Concelho.attributes[0].value = "";
 				for(let i = 0; i < fregs.length; i++)
@@ -128,9 +132,11 @@
 					}*/
 				}
 				function showDists()
-				{		
+				{	
+					Portugal.Portugal.attributes[0].value = "";
 					for(let i = 0; i < dists.length; i++)
 					{
+						dists[i].Distrito.attributes[0].value = dd[i].Path;
 						dists[i].Distrito.addEventListener("click", function(el) 
 						{
 							btn.style.visibility="visible";
@@ -138,51 +144,51 @@
 							let y = el.clientY;
 							
 							cleanConcelhos();
-									let tgt = el.target.getBBox();
-									let z = 180 / (tgt.width + tgt.height);
-									svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-((width/z)/2)} ${tgt.y-((height/z)/2)} ${width/z} ${height/z}`);
-									span.innerHTML = el.target.id;
-									for(let j = 0; j < dists[i].Concelhos.length; j++)
+							let tgt = el.target.getBBox();
+							let z = 180 / (tgt.width + tgt.height);
+							svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-((width/z)/2)} ${tgt.y-((height/z)/2)} ${width/z} ${height/z}`);
+							span.innerHTML = el.target.id;
+							for(let j = 0; j < dists[i].Concelhos.length; j++)
+							{
+								dists[i].Concelhos[j].attributes[0].value = dc.find(x => x.Id === dists[i].Concelhos[j].id).Path;
+								dists[i].Concelhos[j].addEventListener("click", el2 => 
+								{
+									/*if(game)
 									{
-										dists[i].Concelhos[j].attributes[0].value = dc.find(x => x.Id === dists[i].Concelhos[j].id).Path;
-										dists[i].Concelhos[j].addEventListener("click", el2 => 
+										if(answer(el2.target.id, goal))
 										{
-											/*if(game)
+											tries = 3
+											game=false;
+											span.innerHTML = `Win(${el2.target.id})!`;
+											btn.style.visibility="visible";
+										}
+										else
+										{
+											tries--;
+											span.innerHTML = `Wrong(${el2.target.id})! Lives = ${tries}.`;
+											if(tries <= 0)
 											{
-												if(answer(el2.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${el2.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${el2.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
+												game=false;
+												span.innerHTML += `\nLose...`;
 											}
-											else */
-											let tgt2 = el2.target.getBBox();
-											let z = 200 / (tgt2.width + tgt2.height);
-											svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
-											span.innerHTML = el2.target.id;
-											cleanFreguesias();
-											for(k = 0; k < concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias.length; k++)
-											{
-												concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].attributes[0].value = df.find(x => x.Id === concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].id).Path;
-												concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].addEventListener("click", el3 =>
-												{
-													span.innerHTML = el3.target.id;
-												});
-											}
+										}
+									}
+									else */
+									let tgt2 = el2.target.getBBox();
+									let z = 200 / (tgt2.width + tgt2.height);
+									svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
+									span.innerHTML = el2.target.id;
+									cleanFreguesias();
+									for(k = 0; k < concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias.length; k++)
+									{
+										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].attributes[0].value = df.find(x => x.Id === concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].id).Path;
+										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].addEventListener("click", el3 =>
+										{
+											span.innerHTML = el3.target.id;
 										});
-								}
+									}
+								});
+						}
 						});
 					}
 				}

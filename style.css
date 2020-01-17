@@ -61,3 +61,20 @@ path {
 .Distritos:active {
 	fill: black;
 }
+
+.País {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.4;
+	stroke-opacity: 1;
+}
+
+.País:hover {
+	fill: red;
+}
+
+.País:active {
+	fill: black;
+}
