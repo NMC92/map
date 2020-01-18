@@ -28,13 +28,14 @@
 				const height = 366;
 				const a = document.getElementById("svgmap");
 				const svgDoc = a.contentDocument;
-				let Portugal = svgDoc.getElementsByClassName('País');
+				const Portugal = svgDoc.getElementsByClassName('País');
 				const Distritos = svgDoc.getElementsByClassName('Distritos');
 				const Concelhos = svgDoc.getElementsByClassName('Concelhos');
 				const Freguesias = svgDoc.getElementsByClassName('Freguesias');
 				let dists = new Array();
 				let concs = new Array();
 				let fregs = new Array();
+				let dp = new Array();
 				let dd = new Array();
 				let dc = new Array();
 				let df = new Array();
@@ -65,6 +66,8 @@
 					dists.push({Name:Distritos[i].id,Distrito:Distritos[i],Concelhos:svgDoc.getElementsByClassName(strAux),Freguesias:svgDoc.getElementsByClassName("freg"+strAux.toLowerCase())});
 				};
 				
+				dp.push({Path:Portugal.Portugal.attributes[0].value, Id:Portugal.Portugal.id});
+				//console.log(dp[0].Id);
 				for(let i = 0; i < dists.length; i++)
 					dd.push({Path:dists[i].Distrito.attributes[0].value,Id:Distritos[i].id});
 				for(let i = 0; i < concs.length; i++)
