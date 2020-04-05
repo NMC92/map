@@ -23,15 +23,13 @@
 		<span id="goalText"></span>
 		<script>
 			setTimeout(function(){
-			
 				const width = 250;
 				const height = 366;
 				const a = document.getElementById("svgmap");
 				const svgDoc = a.contentDocument;
 				const Portugal = svgDoc.getElementsByClassName('País');
 				const Distritos = svgDoc.getElementsByClassName('Distritos');
-				const Concelhos = svgDoc.getElementsByClassName('Concelhos');
-				const Freguesias = svgDoc.getElementsByClassName('Freguesias');
+				const Pins = svgDoc.getElementsByClassName('pins');
 				let dists = new Array();
 				let concs = new Array();
 				let fregs = new Array();
@@ -39,7 +37,9 @@
 				let dd = new Array();
 				let dc = new Array();
 				let df = new Array();
-				console.log(Freguesias.length);
+				let dpins = new Array();
+				for(let q = 0; q < Pins.length; q++)
+					dpins.push({Id:Pins[q].attributes[2].value,Desc:Pins[q].attributes[3].value,Image:Pins[q].attributes[4].value});
 				for(let i = 0; i < Distritos.length; i++)
 				{
 					let strAux = Distritos[i].id.split('(')[0];
@@ -66,16 +66,13 @@
 				};
 				
 				dp.push({Path:Portugal.Portugal.attributes[0].value, Id:Portugal.Portugal.id});
-				//console.log(dp[0].Id);
+				
 				for(let i = 0; i < dists.length; i++)
 					dd.push({Path:dists[i].Distrito.attributes[0].value,Id:Distritos[i].id});
 				for(let i = 0; i < concs.length; i++)
 					dc.push({Path:concs[i].Concelho.attributes[0].value,Id:concs[i].Name}); 
 				for(let i = 0; i < fregs.length; i++)
-				{
-					
 					df.push({Path:fregs[i].Freguesia.attributes[0].value,Id:fregs[i].Name});
-				}
 				
 				const span = document.getElementById("span");
 				const btn = document.getElementById("reset");
@@ -83,7 +80,7 @@
 				const goalText = document.getElementById("goalText");
 				btn.style.visibility="hidden";
 				
-				let x = Math.floor((Math.random() * Concelhos.length)+1);
+				let x = Math.floor((Math.random() * concs.length)+1);
 				//let goal = Concelhos[x].id;
 				let guess = "";
 				let tries = 99999999;
@@ -97,10 +94,15 @@
 				for(let i = 0; i < fregs.length; i++)
 					fregs[i].Freguesia.attributes[0].value = "";
 				
+				function hideIcons()
+				{
+					for(let i = 0; i < Pins.length; i++)
+					Pins[i].attributes[4].value = "";
+				}
+					
 				function answer(a, b){ return (a === b); }
 				function bigger(a, b){ return (a >= b ? a : b); }
 				function smaller(a, b){ return (a < b ? a : b); }
-				
 				function cleanConcelhos()
 				{
 					cleanFreguesias();
@@ -112,11 +114,12 @@
 				function cleanFreguesias()
 				{
 					for(let i = 0; i < fregs.length; i++)
-						fregs[i].Freguesia.attributes[0].value = ""
+						fregs[i].Freguesia.attributes[0].value = "";
+						hideIcons();
 				}
 				
 				btn.addEventListener("click", reset); 
-							
+				
 				function reset() 
 				{ 
 					cleanConcelhos();
@@ -134,6 +137,11 @@
 						span.innerHTML = `Where is ${goal}?`;
 						//game = true;
 					}*/
+				}
+				
+				function func(arr, str)
+				{
+					return arr.find(p => p.Id.includes(str.replace(/ /g, '_')));
 				}
 				function showDists()
 				{	
@@ -188,7 +196,28 @@
 										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].attributes[0].value = df.find(x => x.Id === concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].id).Path;
 										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].addEventListener("click", el3 =>
 										{
+											let tgt3 = el3.target.getBBox();
+											let z = 220 / (tgt3.width + tgt3.height);
+											svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
 											span.innerHTML = el3.target.id;
+											
+											if(dpins.find(d => d.Id.includes(el3.target.id.replace(/ /g, '_'))) != null)
+											{
+												let l;
+												for(l = 0; l < Pins.length; l++)
+													if(dpins[l].Id.includes(el3.target.id.replace(/ /g, '_')))
+													{
+														Pins[l].attributes[4].value = dpins.find(d => d.Id === Pins[l].id).Image;
+														Pins[l].addEventListener("click", el4 =>
+														{
+															let tgt4 = el4.target.getBBox();
+															let z = 220 / (tgt4.width + tgt4.height);
+															svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
+															span.innerHTML = el4.target.attributes[3].value;
+														});
+													}
+											}
+											
 										});
 									}
 								});
@@ -210,10 +239,7 @@
 						showDists();
 				});
 				
-				//var conc = Array.prototype.slice.call( Concelhos, 0 );
-				//conc.sort((a, b) => (a.id > b.id) ? 1 : -1)
-				//foreach(conc) console.log(conc.id);
-			}, 500);			
+			}, 1000);
 		</script>
     </body>
 </html>
