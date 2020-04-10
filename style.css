@@ -78,3 +78,8 @@ path {
 .País:active {
 	fill: black;
 }
+
+.pins {
+	fill: black;
+	stroke-width:0.00054;
+}
