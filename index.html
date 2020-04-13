@@ -102,9 +102,13 @@
 						Pins[i].attributes[0].value = "";
 				}
 				hideIcons();
+				
 				function answer(a, b){ return (a === b); }
+				
 				function bigger(a, b){ return (a >= b ? a : b); }
+				
 				function smaller(a, b){ return (a < b ? a : b); }
+				
 				function cleanConcelhos()
 				{
 					cleanFreguesias();
@@ -217,21 +221,21 @@
 														{
 															let m;
 															for(m = 0; m < Pins.length; m++)
-																if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.includes(el4.target.attributes[3].value.split(':')[0])))
+																if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
 																	{Pins[m].style.opacity = 0.05;}
 														});
 														Pins[l].addEventListener("mouseout", el4 =>
 														{
 															let m;
 															for(m = 0; m < Pins.length; m++)
-																if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.includes(el4.target.attributes[3].value.split(':')[0])))
+																if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
 																	Pins[m].style.opacity = 1;
 														});
 														Pins[l].addEventListener("click", el4 =>
 														{
 															let idx = dpins.indexOf(dpins.find(d => d.Id === el4.target.attributes[3].value));
 															let tgt4 = Pins[(idx*2)+1].getBBox();
-															let z = 220 / (tgt4.width + tgt4.height);
+															let z = 200 / (tgt4.width + tgt4.height);
 															svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
 															span.innerHTML = dpins[idx].Desc;
 														});
@@ -239,21 +243,21 @@
 														{
 															let m;
 															for(m = 0; m < Pins.length; m++)
-																if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.includes(el4.target.attributes[3].value.split(':')[0])))
+																if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
 																	Pins[m].style.opacity = 0.05;
 														});
 														Pins[l+1].addEventListener("mouseout", el4 =>
 														{
 															let m;
 															for(m = 0; m < Pins.length; m++)
-																if(Pins[m].id.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.includes(el4.target.attributes[3].value.split(':')[0])))
+																if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
 																	Pins[m].style.opacity = 1;
 														});
 														
 														Pins[l+1].addEventListener("click", el4 =>
 														{
 															let tgt4 = el4.target.getBBox();
-															let z = 210 / (tgt4.width + tgt4.height);
+															let z = 200 / (tgt4.width + tgt4.height);
 															svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
 															span.innerHTML = el4.target.attributes[4].value;
 														});
