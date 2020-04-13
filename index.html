@@ -193,7 +193,7 @@
 									}
 									else */
 									let tgt2 = el2.target.getBBox();
-									let z = 200 / (tgt2.width + tgt2.height);
+									let z = 185 / (tgt2.width + tgt2.height);
 									svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
 									span.innerHTML = el2.target.id;
 									cleanFreguesias();
@@ -202,12 +202,12 @@
 										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].attributes[0].value = df.find(x => x.Id === concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].id).Path;
 										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].addEventListener("click", el3 =>
 										{
-											let tgt3 = el3.target.getBBox();
-											let z = 220 / (tgt3.width + tgt3.height);
-											svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
 											span.innerHTML = el3.target.id;
-											if(dpins.find(d => d.Id.includes(el3.target.id.replace(/ /g, '_'))) !== null)
+											if (typeof dpins.find(d => d.Id.includes(el3.target.id.replace(/ /g, '_'))) !== "undefined")
 											{
+												let tgt3 = el3.target.getBBox();
+												let z = 200 / (tgt3.width + tgt3.height);
+												svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
 												hideIcons();
 												let l;
 												for(l = 0; l < Pins.length; l=l+2)
@@ -235,7 +235,7 @@
 														{
 															let idx = dpins.indexOf(dpins.find(d => d.Id === el4.target.attributes[3].value));
 															let tgt4 = Pins[(idx*2)+1].getBBox();
-															let z = 200 / (tgt4.width + tgt4.height);
+															let z = 150 / (tgt4.width + tgt4.height);
 															svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
 															span.innerHTML = dpins[idx].Desc;
 														});
@@ -257,7 +257,7 @@
 														Pins[l+1].addEventListener("click", el4 =>
 														{
 															let tgt4 = el4.target.getBBox();
-															let z = 200 / (tgt4.width + tgt4.height);
+															let z = 150 / (tgt4.width + tgt4.height);
 															svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
 															span.innerHTML = el4.target.attributes[4].value;
 														});
