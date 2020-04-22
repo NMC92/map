@@ -41,6 +41,10 @@ path {
 	fill: orange;
 }
 
+.Exclave {
+	stroke-width: 0.1;
+}
+
 .Concelhos:active {
 	fill: green;
 }
