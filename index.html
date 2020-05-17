@@ -65,7 +65,7 @@
 					dists.push({Name:Distritos[i].id,Distrito:Distritos[i],Concelhos:svgDoc.getElementsByClassName(strAux),Freguesias:svgDoc.getElementsByClassName("freg"+strAux.toLowerCase())});
 				};
 				
-				dp.push({Path:Portugal.Portugal.attributes[0].value, Id:Portugal.Portugal.id});
+				dp.push({Path:Portugal[0].attributes[0].value, Id:Portugal[0].id});
 				
 				for(let i = 0; i < dists.length; i++)
 					dd.push({Path:dists[i].Distrito.attributes[0].value,Id:Distritos[i].id});
@@ -151,7 +151,7 @@
 				}
 				function showDists()
 				{	
-					Portugal.Portugal.attributes[0].value = "";
+					Portugal[0].attributes[0].value = "";
 					for(let i = 0; i < dists.length; i++)
 					{
 						dists[i].Distrito.attributes[0].value = dd[i].Path;
