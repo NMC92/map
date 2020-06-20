@@ -73,7 +73,9 @@
 					dc.push({Path:concs[i].Concelho.attributes[0].value,Id:concs[i].Name}); 
 				for(let i = 0; i < fregs.length; i++)
 					df.push({Path:fregs[i].Freguesia.attributes[0].value,Id:fregs[i].Name});
-				console.log(df.length);
+				for(let cfregs = 0; cfregs<dists.length;cfregs++)
+					console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + dists[cfregs].Freguesias.length);
+				console.log("\nTotal de freguesias: " + df.length);
 				const span = document.getElementById("span");
 				const btn = document.getElementById("reset");
 				const play = document.getElementById("game");
