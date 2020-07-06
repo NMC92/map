@@ -74,8 +74,11 @@
 				for(let i = 0; i < fregs.length; i++)
 					df.push({Path:fregs[i].Freguesia.attributes[0].value,Id:fregs[i].Name});
 				for(let cfregs = 0; cfregs<dists.length;cfregs++)
-					console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + dists[cfregs].Freguesias.length);
-				console.log("\nTotal de freguesias: " + df.length);
+					if(cfregs !== 14)
+						console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + dists[cfregs].Freguesias.length);
+					else
+						console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + parseInt(dists[cfregs].Freguesias.length-1));
+				console.log("\nTotal de freguesias: " + parseInt(df.length-1));
 				const span = document.getElementById("span");
 				const btn = document.getElementById("reset");
 				const play = document.getElementById("game");
