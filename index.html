@@ -29,10 +29,13 @@
 				const svgDoc = a.contentDocument;
 				const Portugal = svgDoc.getElementsByClassName('País');
 				const Distritos = svgDoc.getElementsByClassName('Distritos');
+				const Exclaves = svgDoc.getElementsByClassName('exclave');
+				const Ilhas = svgDoc.getElementsByClassName('ilha');
 				const Pins = svgDoc.getElementsByClassName('pins');
 				let dists = new Array();
 				let concs = new Array();
 				let fregs = new Array();
+				let fregsall = new Array();
 				let dp = new Array();
 				let dd = new Array();
 				let dc = new Array();
@@ -58,7 +61,9 @@
 						test = test.split('(')[0]+"freg";
 						for(let k = 0; k < svgDoc.getElementsByClassName(test).length; k++)
 						{
-							fregs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Distrito:Distritos[i].id.split('(')[0],Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Freguesia:svgDoc.getElementsByClassName(test)[k]});
+							if(!(svgDoc.getElementsByClassName(test)[k].id in Exclaves || svgDoc.getElementsByClassName(test)[k].id in Ilhas))
+								fregs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
+							fregsall.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
 						}
 						concs.push({Name:svgDoc.getElementsByClassName(strAux)[j].id,Distrito:Distritos[i].id.split('(')[0],Concelho:svgDoc.getElementsByClassName(strAux)[j],Freguesias:svgDoc.getElementsByClassName(test)});
 					}
@@ -70,15 +75,12 @@
 				for(let i = 0; i < dists.length; i++)
 					dd.push({Path:dists[i].Distrito.attributes[0].value,Id:Distritos[i].id});
 				for(let i = 0; i < concs.length; i++)
-					dc.push({Path:concs[i].Concelho.attributes[0].value,Id:concs[i].Name}); 
-				for(let i = 0; i < fregs.length; i++)
-					df.push({Path:fregs[i].Freguesia.attributes[0].value,Id:fregs[i].Name});
+					dc.push({Path:concs[i].Concelho.attributes[0].value,Id:concs[i].Name});
+				for(let i = 0; i < fregsall.length; i++)
+					df.push({Path:fregsall[i].Freguesia.attributes[0].value,Id:fregsall[i].Name});
 				for(let cfregs = 0; cfregs<dists.length;cfregs++)
-					if(cfregs !== 14 && cfregs !== 15)
-						console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + dists[cfregs].Freguesias.length);
-					else
-						console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + parseInt(dists[cfregs].Freguesias.length-1));
-				console.log("\nTotal de freguesias: " + parseInt(df.length-1));
+					console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + filterItems(dists[cfregs].Name.split('(')[0]).length);
+				console.log("\nTotal de freguesias: " + parseInt(fregs.length));
 				const span = document.getElementById("span");
 				const btn = document.getElementById("reset");
 				const play = document.getElementById("game");
@@ -96,9 +98,8 @@
 					dists[i].Distrito.attributes[0].value = "";
 				for(let i = 0; i < concs.length; i++)
 					concs[i].Concelho.attributes[0].value = "";
-				for(let i = 0; i < fregs.length; i++)
-					fregs[i].Freguesia.attributes[0].value = "";
-				
+				for(let i = 0; i < fregsall.length; i++)
+					fregsall[i].Freguesia.attributes[0].value = "";
 				function hideIcons()
 				{
 					for(let i = 1; i < Pins.length; i=i+2)
@@ -114,6 +115,14 @@
 				
 				function smaller(a, b){ return (a < b ? a : b); }
 				
+				function filterItems(dist) 
+				{
+					return fregs.filter(function(el) 
+					{
+						return el.Distrito.toLowerCase() === dist.toLowerCase();
+					})
+				}
+				
 				function cleanConcelhos()
 				{
 					cleanFreguesias();
@@ -124,8 +133,8 @@
 				
 				function cleanFreguesias()
 				{
-					for(let i = 0; i < fregs.length; i++)
-						fregs[i].Freguesia.attributes[0].value = "";
+					for(let i = 0; i < fregsall.length; i++)
+						fregsall[i].Freguesia.attributes[0].value = "";
 						hideIcons();
 				}
 				
