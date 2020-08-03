@@ -3,46 +3,29 @@ path {
     pointer-events: all;
 }
 
+.País {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.4;
+	stroke-opacity: 1;
+}
+
+.País:hover {
+	fill: red;
+}
+
+.País:active {
+	fill: black;
+}
+
 .Atlantico {
 	fill: none;
 	fill-rule: evenodd;
 	stroke: #ffffff;
 	stroke-width: 0.70566702;
 	stroke-opacity:1
-}
-
-.Freguesias {
-	fill: #ffefd5;
-	fill-opacity: 1;
-	fill-rule: evenodd;
-	stroke: #a1;
-	stroke-width: 0.05;
-	stroke-opacity: 1;
-}
-
-.Freguesias:hover {
-	fill: #71a3f5;
-}
-
-.Freguesias:active {
-	fill: blue;
-}
-
-.Concelhos {
-	fill: #ffefd5;
-	fill-opacity: 1;
-	fill-rule: evenodd;
-	stroke: #a1;
-	stroke-width: 0.2;
-	stroke-opacity: 1;
-}
-
-.Concelhos:hover {
-	fill: orange;
-}
-
-.Concelhos:active {
-	fill: green;
 }
 
 .Distritos {
@@ -62,21 +45,72 @@ path {
 	fill: black;
 }
 
-.País {
+.Concelhos {
 	fill: #ffefd5;
 	fill-opacity: 1;
 	fill-rule: evenodd;
 	stroke: #a1;
-	stroke-width: 0.4;
+	stroke-width: 0.2;
 	stroke-opacity: 1;
 }
 
-.País:hover {
-	fill: red;
+.Concelhos:hover {
+	fill: orange;
 }
 
-.País:active {
-	fill: black;
+.Freguesias {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.05;
+	stroke-opacity: 1;
+}
+
+.Freguesias:hover {
+	fill: #71a3f5;
+}
+
+.Freguesias:active {
+	fill: blue;
+}
+
+.Concelhos:active {
+	fill: green;
+}
+
+.exfreg {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.025;
+	stroke-opacity: 1;
+}
+
+.exfreg:hover {
+	fill: cyan;
+}
+
+.exfreg:active {
+	fill: dodgerblue;
+}
+
+.locs {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.02;
+	stroke-opacity: 1;
+}
+
+.locs:hover {
+	fill: navy;
+}
+
+.locs:active {
+	fill: indigo;
 }
 
 .pins {

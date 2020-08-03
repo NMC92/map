@@ -31,17 +31,24 @@
 				const Distritos = svgDoc.getElementsByClassName('Distritos');
 				const Exclaves = svgDoc.getElementsByClassName('exclave');
 				const Ilhas = svgDoc.getElementsByClassName('ilha');
+				const Exfregs = svgDoc.getElementsByClassName('exfreg');
+				const Locs= svgDoc.getElementsByClassName('locs');
 				const Pins = svgDoc.getElementsByClassName('pins');
 				let dists = new Array();
 				let concs = new Array();
 				let fregsall = new Array();
 				let fregs = new Array();
+				let exfregs = new Array();
+				let locs = new Array();
 				let dp = new Array();
 				let dd = new Array();
 				let dc = new Array();
 				let df = new Array();
+				let def = new Array();
+				let dl = new Array();
 				let dpins = new Array();
 				let selPin = '';
+				let tempBox = {H:0,W:0,X:0,Y:0}
 				for(let q = 0; q < Pins.length; q=q+2)
 					dpins.push({Id:Pins[q].attributes[3].value,Desc:Pins[q+1].attributes[4].value, Image:Pins[q+1].attributes[5].value, Pin: Pins[q].attributes[0].value, W: Pins[q+1].attributes[8].value, H: Pins[q+1].attributes[7].value});
 				for(let i = 0; i < Distritos.length; i++)
@@ -62,8 +69,12 @@
 						test = test.split('(')[0]+"freg";
 						for(let k = 0; k < svgDoc.getElementsByClassName(test).length; k++)
 						{
-							if(!(svgDoc.getElementsByClassName(test)[k].id in Exclaves || svgDoc.getElementsByClassName(test)[k].id in Ilhas))
+							if(!(svgDoc.getElementsByClassName(test)[k].id in Exclaves || svgDoc.getElementsByClassName(test)[k].id in Ilhas || svgDoc.getElementsByClassName(test)[k].id in Exfregs || svgDoc.getElementsByClassName(test)[k].id in Locs))
 								fregs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
+							else if(svgDoc.getElementsByClassName(test)[k].id in Exfregs)
+								exfregs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
+							else if(svgDoc.getElementsByClassName(test)[k].id in Locs)
+								locs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Localidade:svgDoc.getElementsByClassName(test)[k]});
 							fregsall.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
 						}
 						concs.push({Name:svgDoc.getElementsByClassName(strAux)[j].id,Distrito:Distritos[i].id.split('(')[0],Concelho:svgDoc.getElementsByClassName(strAux)[j],Freguesias:svgDoc.getElementsByClassName(test)});
@@ -78,7 +89,12 @@
 				for(let i = 0; i < concs.length; i++)
 					dc.push({Path:concs[i].Concelho.attributes[0].value,Id:concs[i].Name});
 				for(let i = 0; i < fregsall.length; i++)
-					df.push({Path:fregsall[i].Freguesia.attributes[0].value,Id:fregsall[i].Name});
+					if(!(fregsall[i].Name.includes('exfreg')))
+						df.push({Path:fregsall[i].Freguesia.attributes[0].value,Id:fregsall[i].Name});
+				for(let i = 0; i < exfregs.length; i++)
+					def.push({Path:exfregs[i].Freguesia.attributes[0].value,Id:exfregs[i].Name});
+				for(let i = 0; i < locs.length; i++)
+					dl.push({Path:locs[i].Localidade.attributes[0].value,Id:locs[i].Name});
 				for(let cfregs = 0; cfregs<dists.length;cfregs++)
 					console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + filterItems(dists[cfregs].Name.split('(')[0]).length);
 				console.log("\nTotal de freguesias: " + parseInt(fregs.length));
@@ -103,6 +119,10 @@
 					fregsall[i].Freguesia.attributes[0].value = "";
 				for(let i = 0; i < fregs.length; i++)
 					fregs[i].Freguesia.attributes[0].value = "";
+				for(let i = 0; i < exfregs.length; i++)
+					exfregs[i].Freguesia.attributes[0].value = "";
+				for(let i = 0; i < locs.length; i++)
+					locs[i].Localidade.attributes[0].value = "";
 				function hideIcons()
 				{
 					for(let i = 1; i < Pins.length; i=i+2)
@@ -130,9 +150,27 @@
 					})
 				}
 				
+				function filterExFregs(freg) 
+				{
+					return exfregs.filter(function(el) 
+					{
+						return freg.toLowerCase().includes(el.Freguesia.id.split('(')[0].toLowerCase());
+					})
+				}
+				
+				function filterLocs(freg) 
+				{
+					return locs.filter(function(el) 
+					{
+						return freg.toLowerCase() === el.Localidade.id.split('#')[1].split(')')[0].toLowerCase();
+					})
+				}
+				
 				function cleanConcelhos()
 				{
 					cleanFreguesias();
+					cleanExFreguesias();
+					cleanLocalidades();
 					for(let i = 0; i < dists.length; i++)
 						for(let j = 0; j < dists[i].Concelhos.length; j++)
 							dists[i].Concelhos[j].attributes[0].value = "";
@@ -142,7 +180,19 @@
 				{
 					for(let i = 0; i < fregsall.length; i++)
 						fregsall[i].Freguesia.attributes[0].value = "";
-						hideIcons();
+					hideIcons();
+				}
+				
+				function cleanExFreguesias()
+				{
+					for(let i = 0; i < exfregs.length; i++)
+						exfregs[i].Freguesia.attributes[0].value = "";
+				}
+				
+				function cleanLocalidades()
+				{
+					for(let i = 0; i < locs.length; i++)
+						locs[i].Localidade.attributes[0].value = "";
 				}
 				
 				btn.addEventListener("click", reset); 
@@ -220,18 +270,32 @@
 									svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
 									span.innerHTML = el2.target.id;
 									cleanFreguesias();
-									for(k = 0; k < concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias.length; k++)
+									cleanExFreguesias();
+									let currConc = concs.find(x => x.Name === dists[i].Concelhos[j].id);
+									for(k = 0; k < currConc.Freguesias.length; k++)
 									{
-										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].attributes[0].value = df.find(x => x.Id === concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].id).Path;
-										concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].addEventListener("click", el3 =>
+										if(!(currConc.Freguesias[k].id.includes('exfreg') || currConc.Freguesias[k].id.includes('loc#') || currConc.Freguesias[k].id.includes('resid#')) === true)
+											currConc.Freguesias[k].attributes[0].value = df.find(x => x.Id === concs.find(x => x.Name === dists[i].Concelhos[j].id).Freguesias[k].id).Path;
+										//else
+											//console.log(currConc.Freguesias[k].id);
+										currConc.Freguesias[k].addEventListener("click", el3 =>
 										{
+											selPin = '';
+											if(!(el3.target.id.includes('exfreg') || el3.target.id.includes('#')))
+												cleanExFreguesias();
+											if(!(el3.target.id.includes('#')))
+												cleanLocalidades();
 											span.innerHTML = el3.target.id;
-											if (typeof dpins.find(d => d.Id.includes(el3.target.id.replace(/ /g, '_'))) !== "undefined")
+											if (typeof dpins.find(d => d.Id.includes(el3.target.id.split('(')[0].replace(/ /g, '_'))) !== "undefined")
 											{
-												let tgt3 = el3.target.getBBox();
-												let z = 200 / (tgt3.width + tgt3.height);
-												svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
-												hideIcons();
+												if(!(el3.target.id.includes('exfreg') || el3.target.id.includes('#')))
+													hideIcons();
+												if(!(el3.target.id.includes('loc#')))
+												{
+													let tgt3 = el3.target.getBBox();
+													let z = 200 / (tgt3.width + tgt3.height);
+													svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
+												}
 												let l;
 												for(l = 0; l < Pins.length; l=l+2)
 												{
@@ -242,85 +306,297 @@
 														Pins[l].attributes[0].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).Pin;
 														Pins[l+1].attributes[5].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).Image;
 														Pins[l+1].attributes[7].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).H;
-														Pins[l+1].attributes[8].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).W;
-														
+														Pins[l+1].attributes[8].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).W;		
 														if(selPin == '')
 														{
-															Pins[l].addEventListener("mouseover", el4 =>
+															Pins[l].addEventListener("mouseover", el5 =>
 															{
 																let m;
 																if(selPin === '')
 																	for(m = 0; m < Pins.length; m++)
-																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
 																			Pins[m].style.opacity = 0.025;
 															});
-															Pins[l].addEventListener("mouseout", el4 =>
+															Pins[l].addEventListener("mouseout", el5 =>
 															{
 																let m;
 																if(selPin === '')
 																	for(m = 0; m < Pins.length; m++)
-																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
 																			Pins[m].style.opacity = 1;
 															});
-															Pins[l].addEventListener("click", el4 =>
+															Pins[l].addEventListener("click", el5 =>
 															{	
-																if(selPin === '')
-																	selPin = el4.target.id;
-																else
+																if(el5.target.id.split(':')[0] === selPin.split(':')[0])
+																{
 																	selPin = '';
-																let idx = dpins.indexOf(dpins.find(d => d.Id === el4.target.attributes[3].value));
-																let tgt4 = Pins[(idx*2)+1].getBBox();
-																let z = 150 / (tgt4.width + tgt4.height);
-																svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
-																span.innerHTML = dpins[idx].Desc;
-																let m;
-																for(m = 0; m < Pins.length; m++)
-																	if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
-																		Pins[m].style.opacity = 0.025;
+																	let idx = dpins.indexOf(dpins.find(d => d.Id === el5.target.attributes[3].value));
+																	let tgt5 = Pins[(idx*2)+1].getBBox();
+																	let z = 160 / (tgt5.width + tgt5.height);
+																	svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																	span.innerHTML = dpins[idx].Desc;
+																	let m;
+																	for(m = 0; m < Pins.length; m++)
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																			Pins[m].style.opacity = 0.025;
+																}
+																else if(selPin === '')
+																{
+																	selPin = el5.target.id;
+																	let idx = dpins.indexOf(dpins.find(d => d.Id === el5.target.attributes[3].value));
+																	let tgt5 = Pins[(idx*2)+1].getBBox();
+																	let z = 160 / (tgt5.width + tgt5.height);
+																	svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																	span.innerHTML = dpins[idx].Desc;
+																	let m;
+																	for(m = 0; m < Pins.length; m++)
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																			Pins[m].style.opacity = 0.025;
+																}
+																
 															});
-															Pins[l+1].addEventListener("mouseover", el4 =>
+															Pins[l+1].addEventListener("mouseover", el5 =>
 															{
 																let m;
 																if(selPin === '')
 																	for(m = 0; m < Pins.length; m++)
-																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
 																			Pins[m].style.opacity = 0.025;
 															});
-															Pins[l+1].addEventListener("mouseout", el4 =>
+															Pins[l+1].addEventListener("mouseout", el5 =>
 															{
 																let m;
 																if(selPin === '')
 																	for(m = 0; m < Pins.length; m++)
-																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
 																			Pins[m].style.opacity = 1;
 															});
 															
-															Pins[l+1].addEventListener("click", el4 =>
+															Pins[l+1].addEventListener("click", el5 =>
 															{
-																if(selPin === '')
-																	selPin = el4.target.id;
-																else
+																if(el5.target.id.split(':')[0] === selPin.split(':')[0])
+																{
 																	selPin = '';
-																let tgt4 = el4.target.getBBox();
-																let z = 150 / (tgt4.width + tgt4.height);
-																svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
-																span.innerHTML = el4.target.attributes[4].value;
-																let m;
-																for(m = 0; m < Pins.length; m++)
-																	if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el4.target.attributes[3].value.split(':')[0]))
-																		Pins[m].style.opacity = 0.025;
-																});
+																	let tgt5 = el5.target.getBBox();
+																	let z = 160 / (tgt5.width + tgt5.height);
+																	svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																	span.innerHTML = el5.target.attributes[4].value;
+																	let m;
+																	for(m = 0; m < Pins.length; m++)
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																			Pins[m].style.opacity = 0.025;
+																}
+																else if(selPin === '')
+																{
+																	selPin = el5.target.id;
+																	let tgt5 = el5.target.getBBox();
+																	let z = 160 / (tgt5.width + tgt5.height);
+																	svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																	span.innerHTML = el5.target.attributes[4].value;
+																	let m;
+																	for(m = 0; m < Pins.length; m++)
+																		if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																			Pins[m].style.opacity = 0.025;
+																}
+															});
 															
 														}
 													}
 												}
 											}
-											else if(click)
+											else if(click && (exfregs.find(x => el3.target.id.includes(x.Name.split('(')[0])) !== undefined || locs.find(x => el3.target.id.includes(x.Name.split('#')[1].split(')')[0])) !== undefined) && !el3.target.id.includes('#'))
 											{
-												svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
-												hideIcons();
+												let tgt7 = el3.target.getBBox();
+												let z = 200 / (tgt7.width + tgt7.height);
+												svgDoc.children[0].setAttribute(`viewBox`, `${tgt7.x-((width/z)/2)} ${tgt7.y-((height/z)/2)} ${width/z} ${height/z}`);
+												if(!(el3.target.id.includes('#'))) 
+													hideIcons();
 											}
-											
+											else if(el3.target.id.includes('#'))
+											{
+												let tgt8 = tempBox;
+												let z = 200 / (tgt8.W + tgt8.H);
+												svgDoc.children[0].setAttribute(`viewBox`, `${tgt8.X-((width/z)/2)} ${tgt8.Y-((height/z)/2)} ${width/z} ${height/z}`);
+											}
+											let filtEf = filterExFregs(el3.target.id);
+											if(filtEf.length > 0)
+											{
+												for(let l = 0; l < filtEf.length; l++)
+												{
+													let ef = exfregs.find(x => x.Freguesia.id === filtEf[l].Name);
+													ef.Freguesia.attributes[0].value = def.find(x => x.Id === filtEf[l].Name).Path;
+													ef.Freguesia.addEventListener("click", el4 =>
+													{
+														span.innerHTML = el4.target.id.split('(')[0] + '(Ex freguesia)';
+														let tgt4 = el4.target.getBBox();
+														let z = 200 / (tgt4.width + tgt4.height);
+														svgDoc.children[0].setAttribute(`viewBox`, `${tgt4.x-((width/z)/2)} ${tgt4.y-((height/z)/2)} ${width/z} ${height/z}`);
+														let fLocs = filterLocs(el4.target.id.split('(')[0]);
+														for(let i = 0; i < fLocs.length; i++)
+														{
+															if(fLocs.length > 0)
+															{
+																tempBox.H = tgt4.height;
+																tempBox.W = tgt4.width;
+																tempBox.X = tgt4.x;
+																tempBox.Y = tgt4.y;
+																let loc = locs.find(x => x.Localidade.id === fLocs[i].Name);
+																loc.Localidade.attributes[0].value = dl.find(x => x.Id === fLocs[i].Name).Path;
+																loc.Localidade.addEventListener("click", el5 =>
+																{
+																	if(fLocs[i].Name.includes('resid'))
+																		span.innerHTML = 'Residual';
+																	else
+																		span.innerHTML = fLocs[i].Name.split('(')[0];
+																});
+															}
+														}
+													});
+													}
+											}
+											else
+											{
+												if(locs.find(x => el3.target.id.includes(x.Name.split('#')[1].split(')')[0])) !== undefined)
+												{
+													let tgt6 = el3.target.getBBox();
+														let z = 200 / (tgt6.width + tgt6.height);
+														svgDoc.children[0].setAttribute(`viewBox`, `${tgt6.x-((width/z)/2)} ${tgt6.y-((height/z)/2)} ${width/z} ${height/z}`);
+													let fLocs = filterLocs(el3.target.id);
+													for(let i = 0; i < fLocs.length; i++)
+													{
+														let loc = locs.find(x => x.Localidade.id === fLocs[i].Name);
+														loc.Localidade.attributes[0].value = dl.find(x => x.Id === fLocs[i].Name).Path;
+														loc.Localidade.addEventListener("click", el5 =>
+														{
+															let tgt5 = el5.target.getBBox();
+															let z = 200 / (tgt5.width + tgt5.height);
+															svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+															if(fLocs[i].Name.includes('resid'))
+																span.innerHTML = 'Residual';
+															else
+																span.innerHTML = fLocs[i].Name.split('(')[0];
+														});
+													}
+												}
+												if (typeof dpins.find(d => d.Id.includes(el3.target.id.replace(/ /g, '_'))) !== "undefined")
+												{
+													hideIcons();
+													let l;
+													for(l = 0; l < Pins.length; l=l+2)
+													{
+														if(dpins[l/2].Id.includes(el3.target.id.replace(/ /g, '_')))
+														{
+															selPin = '';
+															click = true;
+															Pins[l].attributes[0].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).Pin;
+															Pins[l+1].attributes[5].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).Image;
+															Pins[l+1].attributes[7].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).H;
+															Pins[l+1].attributes[8].value = dpins.find(d => d.Id === Pins[l].attributes[3].value).W;
+															
+															if(selPin == '')
+															{
+																Pins[l].addEventListener("mouseover", el5 =>
+																{
+																	let m;
+																	if(selPin === '')
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 0.025;
+																});
+																Pins[l].addEventListener("mouseout", el5 =>
+																{
+																	let m;
+																	if(selPin === '')
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 1;
+																});
+																Pins[l].addEventListener("click", el5 =>
+																{	
+																	if(el5.target.id.split(':')[0] === selPin.split(':')[0])
+																	{
+																		selPin = '';
+																		let idx = dpins.indexOf(dpins.find(d => d.Id === el5.target.attributes[3].value));
+																		let tgt5 = Pins[(idx*2)+1].getBBox();
+																		let z = 160 / (tgt5.width + tgt5.height);
+																		svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																		span.innerHTML = dpins[idx].Desc;
+																		let m;
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 0.025;
+																	}
+																	
+																	else if(selPin === '')
+																	{
+																		selPin = el5.target.id;
+																		let idx = dpins.indexOf(dpins.find(d => d.Id === el5.target.attributes[3].value));
+																		let tgt5 = Pins[(idx*2)+1].getBBox();
+																		let z = 160 / (tgt5.width + tgt5.height);
+																		svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																		span.innerHTML = dpins[idx].Desc;
+																		let m;
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 0.025;
+																	}
+																});
+																Pins[l+1].addEventListener("mouseover", el5 =>
+																{
+																	let m;
+																	if(selPin === '')
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 0.025;
+																});
+																Pins[l+1].addEventListener("mouseout", el5 =>
+																{
+																	let m;
+																	if(selPin === '')
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 1;
+																});
+																
+																Pins[l+1].addEventListener("click", el5 =>
+																{
+																	if(el5.target.id.split(':')[0] === selPin.split(':')[0])
+																	{
+																		selPin = '';
+																		let tgt5 = el5.target.getBBox();
+																		let z = 150 / (tgt5.width + tgt5.height);
+																		svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																		span.innerHTML = el5.target.attributes[4].value;
+																		let m;
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 0.025;
+																	}
+																	else if(selPin === '')
+																	{
+																		selPin = el5.target.id;
+																		let tgt5 = el5.target.getBBox();
+																		let z = 150 / (tgt5.width + tgt5.height);
+																		svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+																		span.innerHTML = el5.target.attributes[4].value;
+																		let m;
+																		for(m = 0; m < Pins.length; m++)
+																			if(Pins[m].attributes[3].value.includes(el3.target.id.replace(/ /g, '_')) && !(Pins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+																				Pins[m].style.opacity = 0.025;
+																	}
+																	});
+																
+															}
+														}
+													}
+												}
+												else if(click)
+												{
+													let z = 185 / (tgt2.width + tgt2.height);
+													svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
+													hideIcons();
+												}
+											}
 										});
 									}
 								});
