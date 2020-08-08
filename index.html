@@ -1,554 +1,576 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Portugal</title>
-    </head>
-    <body style="">
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-		<object class="map" id="svgmap" type="image/svg+xml" data="map.svg">
-		</object>
-		<span id="span"></span>
-		<button type="button" id="game" >Play!</button>
-		<button type="button" id="reset" >Reset</button>
-		<span id="goalText"></span>
-		<script>
-			setTimeout(function(){
-				const width = 250;
-				const height = 366;
-				const a = document.getElementById("svgmap");
-				const svgDoc = a.contentDocument;
-				const Portugal = svgDoc.getElementsByClassName('País');
-				const Distritos = svgDoc.getElementsByClassName('Distritos');
-				const Exclaves = svgDoc.getElementsByClassName('exclave');
-				const Ilhas = svgDoc.getElementsByClassName('ilha');
-				const Exfregs = svgDoc.getElementsByClassName('exfreg');
-				const Locs= svgDoc.getElementsByClassName('locs');
-				const Pins = svgDoc.getElementsByClassName('pins');
-				let dists = new Array();
-				let concs = new Array();
-				let fregsall = new Array();
-				let fregs = new Array();
-				let exfregs = new Array();
-				let locs = new Array();
-				let pins = new Array();
-				let dp = new Array();
-				let dd = new Array();
-				let dc = new Array();
-				let df = new Array();
-				let def = new Array();
-				let dl = new Array();
-				let dpins = new Array();
-				let selPin = '';
-				let tempBox = {H:0,W:0,X:0,Y:0}
-				let tempBox2 = {H:0,W:0,X:0,Y:0}
-				let loaded = new Array();
-				for(let q = 0; q < Pins.length; q++)
-					if(q%2 === 0)
-						dpins.push({Id:Pins[q].attributes[3].value, Pin: Pins[q].attributes[0].value});//Pins
-					else
-						dpins.push({Id:Pins[q].attributes[3].value,Desc:Pins[q].attributes[4].value, Image:Pins[q].attributes[5].value, Pin: Pins[q].attributes[0].value, W: Pins[q].attributes[8].value, H: Pins[q].attributes[7].value});//Images of pins
-				for(let i = 0; i < Distritos.length; i++)
-				{
-					let strAux = Distritos[i].id.split('(')[0];
-					strAux = strAux == "Bragança" ? "Braganca" : strAux;
-					strAux = strAux == "Castelo Branco" ? "CB" : strAux;
-					strAux = strAux == "Évora" ? "Evora" : strAux;
-					strAux = strAux == "Santarém" ? "Santarem" : strAux;
-					strAux = strAux == "Setúbal" ? "Setubal" : strAux;
-					strAux = strAux == "Viana do Castelo" ? "VC" : strAux;
-					strAux = strAux == "Vila Real" ? "VR" : strAux;
-					for(let j = 0; j < svgDoc.getElementsByClassName(strAux).length; j++)
-					{   
-						test = svgDoc.getElementsByClassName(strAux)[j].id;
-						test = test.replace(/ +/g, "");
-						test = test.toLowerCase();
-						test = test.split('(')[0]+"freg";
-						for(let k = 0; k < svgDoc.getElementsByClassName(test).length; k++)
-						{
-							if(!(svgDoc.getElementsByClassName(test)[k].id in Exclaves || svgDoc.getElementsByClassName(test)[k].id in Ilhas || svgDoc.getElementsByClassName(test)[k].id in Exfregs || svgDoc.getElementsByClassName(test)[k].id in Locs))
-								fregs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
-							else if(svgDoc.getElementsByClassName(test)[k].id in Exfregs)
-								exfregs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
-							else if(svgDoc.getElementsByClassName(test)[k].id in Locs)
-								locs.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Localidade:svgDoc.getElementsByClassName(test)[k]});
-							fregsall.push({Name:svgDoc.getElementsByClassName(test)[k].id,Concelho:svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],Distrito:Distritos[i].id.split('(')[0], Freguesia:svgDoc.getElementsByClassName(test)[k]});
-						}
-						concs.push({Name:svgDoc.getElementsByClassName(strAux)[j].id,Distrito:Distritos[i].id.split('(')[0],Concelho:svgDoc.getElementsByClassName(strAux)[j],Freguesias:svgDoc.getElementsByClassName(test)});
-					}
-					dists.push({Name:Distritos[i].id,Distrito:Distritos[i],Concelhos:svgDoc.getElementsByClassName(strAux),Freguesias:svgDoc.getElementsByClassName("freg"+strAux.toLowerCase())});
-				};
-				dp.push({Path:Portugal[0].attributes[0].value, Id:Portugal[0].id});
-				for(let i = 0; i < Pins.length; i++)
-					pins.push(Pins[i]);
-				for(let i = 0; i < dists.length; i++)
-					dd.push({Path:dists[i].Distrito.attributes[0].value,Id:Distritos[i].id});
-				for(let i = 0; i < concs.length; i++)
-					dc.push({Path:concs[i].Concelho.attributes[0].value,Id:concs[i].Name});
-				for(let i = 0; i < fregsall.length; i++)
-					if(!(fregsall[i].Name.includes('exfreg')))
-						df.push({Path:fregsall[i].Freguesia.attributes[0].value,Id:fregsall[i].Name});
-				for(let i = 0; i < exfregs.length; i++)
-					def.push({Path:exfregs[i].Freguesia.attributes[0].value,Id:exfregs[i].Name});
-				for(let i = 0; i < locs.length; i++)
-					dl.push({Path:locs[i].Localidade.attributes[0].value,Id:locs[i].Name});
-				for(let cfregs = 0; cfregs<dists.length;cfregs++)
-					console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + filterItems(dists[cfregs].Name.split('(')[0]).length);
-				console.log("\nTotal de freguesias: " + parseInt(fregs.length));
-				const span = document.getElementById("span");
-				const btn = document.getElementById("reset");
-				const play = document.getElementById("game");
-				const goalText = document.getElementById("goalText");
-				btn.style.visibility="hidden";
-				
-				let x = Math.floor((Math.random() * fregsall.length)+1);
-				//let goal = Concelhos[x].id;
-				let guess = "";
-				let tries = Number.MAX_SAFE_INTEGER;
-				let lose = false;
-				let game = false;
-				
-				for(let i = 0; i < dists.length; i++)
-					dists[i].Distrito.attributes[0].value = "";
-				for(let i = 0; i < concs.length; i++)
-					concs[i].Concelho.attributes[0].value = "";
-				for(let i = 0; i < fregsall.length; i++)
-					fregsall[i].Freguesia.attributes[0].value = "";
-				for(let i = 0; i < fregs.length; i++)
-					fregs[i].Freguesia.attributes[0].value = "";
-				for(let i = 0; i < exfregs.length; i++)
-					exfregs[i].Freguesia.attributes[0].value = "";
-				for(let i = 0; i < locs.length; i++)
-					locs[i].Localidade.attributes[0].value = "";
-				function hidePins()
-				{
-					for(let i = 0; i < Pins.length; i++)
-						if(i%2 === 0)
-							Pins[i].attributes[0].value = "";
-						else
-						{	
-							Pins[i].attributes[5].value = "";
-							Pins[i].attributes[7].value = 0;
-							Pins[i].attributes[8].value = 0;
-						}							
-				}
-				hidePins();
-				
-				function answer(a, b){ return (a === b); }
-				
-				function bigger(a, b){ return (a >= b ? a : b); }
-				
-				function smaller(a, b){ return (a < b ? a : b); }
-				
-				function filterItems(dist) 
-				{
-					return fregs.filter(function(el) 
-					{
-						return el.Distrito.toLowerCase() === dist.toLowerCase();
-					})
-				}
-				
-				function filterExFregs(freg) 
-				{
-					return exfregs.filter(function(el) 
-					{
-						return freg.toLowerCase().includes(el.Freguesia.id.split('(')[0].toLowerCase());
-					})
-				}
-				
-				function filterLocs(freg) 
-				{
-					return locs.filter(function(el) 
-					{
-						return freg.split(' ').join('_').toLowerCase() === el.Localidade.id.split('#')[1].split(')')[0].toLowerCase();
-					})
-				}
-				
-				function filterPins(freg) 
-				{
-					return pins.filter(function(el) 
-					{
-						return el.id.split(':')[0].toLowerCase().includes(freg.split(' ').join('_').toLowerCase());
-					})
-				}
-				
-				function cleanConcelhos()
-				{
-					cleanFreguesias();
-					cleanExFreguesias();
-					cleanLocalidades();
-					for(let i = 0; i < dists.length; i++)
-						for(let j = 0; j < dists[i].Concelhos.length; j++)
-							dists[i].Concelhos[j].attributes[0].value = "";
-				}
-				
-				function cleanFreguesias()
-				{
-					for(let i = 0; i < fregsall.length; i++)
-						fregsall[i].Freguesia.attributes[0].value = "";
-					hidePins();
-				}
-				
-				function cleanExFreguesias()
-				{
-					for(let i = 0; i < exfregs.length; i++)
-						exfregs[i].Freguesia.attributes[0].value = "";
-				}
-				
-				function cleanLocalidades()
-				{
-					for(let i = 0; i < locs.length; i++)
-						locs[i].Localidade.attributes[0].value = "";
-				}
-				
-				btn.addEventListener("click", reset); 
-				
-				function reset() 
-				{ 
-					selPin = '';
-					cleanConcelhos();
-					btn.style.visibility="hidden";
-					span.innerHTML = "";
-					//span.innerHTML = `Where is ${goal}?`; 
-					//if(game) 
-						svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`);
-					/*else
-					{
-						tries = 3
-						x = Math.floor((Math.random() * 278)+1);
-						goal = Concelhos[x].id;
-						svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`);
-						span.innerHTML = `Where is ${goal}?`;
-						//game = true;
-					}*/
-				}
-				
-				function func(arr, str)
-				{
-					return arr.find(p => p.Id.includes(str.replace(/ /g, '_')));
-				}
-				function showDists()
-				{	
-					Portugal[0].attributes[0].value = "";
-					for(let i = 0; i < dists.length; i++)
-					{
-						dists[i].Distrito.attributes[0].value = dd[i].Path;
-							dists[i].Distrito.addEventListener("click", function(el) 
-							{
-								btn.style.visibility="visible";
-								let x = el.clientX;
-								let y = el.clientY;
-								
-								cleanConcelhos();
-								let tgt = el.target.getBBox();
-								let z = 180 / (tgt.width + tgt.height);
-								svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-((width/z)/2)} ${tgt.y-((height/z)/2)} ${width/z} ${height/z}`);
-								span.innerHTML = el.target.id;
-								for(let j = 0; j < dists[i].Concelhos.length; j++)
-								{
-									dists[i].Concelhos[j].attributes[0].value = dc.find(x => x.Id === dists[i].Concelhos[j].id).Path;
-									if(!loaded.includes(dists[i].Concelhos[j].id))
-									{
-										loaded.push(dists[i].Concelhos[j].id);
-										dists[i].Concelhos[j].addEventListener("click", el2 => 
-										{
-											/*if(game)
-											{
-												if(answer(el2.target.id, goal))
-												{
-													tries = 3
-													game=false;
-													span.innerHTML = `Win(${el2.target.id})!`;
-													btn.style.visibility="visible";
-												}
-												else
-												{
-													tries--;
-													span.innerHTML = `Wrong(${el2.target.id})! Lives = ${tries}.`;
-													if(tries <= 0)
-													{
-														game=false;
-														span.innerHTML += `\nLose...`;
-													}
-												}
-											}
-											else */
-											let click = false;
-											let tgt2 = el2.target.getBBox();
-											let z = 185 / (tgt2.width + tgt2.height);
-											svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
-											span.innerHTML = el2.target.id;
-											cleanFreguesias();
-											cleanExFreguesias();
-											let currConc = concs.find(x => x.Name === dists[i].Concelhos[j].id);
-											for(k = 0; k < currConc.Freguesias.length; k++)
-											{
-												let currFreg = currConc.Freguesias[k];
-												if(!(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#')))
-													currFreg.attributes[0].value = df.find(x => x.Id === currFreg.id).Path;
-												if(loaded.find(lf => lf === currFreg.id) === undefined)
-												{
-													loaded.push(currFreg.id);
-													currFreg.addEventListener("click", el3 =>
-													{
-														let tgt3 = el3.target.getBBox();
-														let z = 200 / (tgt3.width + tgt3.height);
-														selPin = '';
-														let fregPins = filterPins(el3.target.id);
-														if(!(el3.target.id.includes('exfreg') || el3.target.id.includes('#')))
-														{
-															cleanExFreguesias();
-															cleanLocalidades();
-														}
-															
-														span.innerHTML = el3.target.id;
-														if(fregPins.length > 0)
-														{
-															if(!(el3.target.id.includes('exfreg') || el3.target.id.includes('loc#')))
-																hidePins();
-															if(!(el3.target.id.includes('loc#')))
-															{
-																svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
-															}
-															let l;
-															for(l = 0; l < fregPins.length; l=l+2)
-															{
-																click = true;
-																fregPins[l].attributes[0].value = dpins.find(d => d.Id === fregPins[l].id).Pin;
-																fregPins[l+1].attributes[5].value = dpins.find(d => d.Id === fregPins[l+1].attributes[3].value).Image;
-																fregPins[l+1].attributes[7].value = dpins.find(d => d.Id === fregPins[l+1].attributes[3].value).H;
-																fregPins[l+1].attributes[8].value = dpins.find(d => d.Id === fregPins[l+1].attributes[3].value).W;		
-															}
-														}
-														let filtEf = filterExFregs(el3.target.id);
-														if(filtEf.length > 1)
-														{
-															let tgta = el3.target.getBBox();
-															let z = 200 / (tgta.width + tgta.height);
-															svgDoc.children[0].setAttribute(`viewBox`, `${tgta.x-((width/z)/2)} ${tgta.y-((height/z)/2)} ${width/z} ${height/z}`);
-															for(let l = 0; l < filtEf.length; l++)
-															{
-																let ef = exfregs.find(x => x.Freguesia.id === filtEf[l].Name);
-																ef.Freguesia.attributes[0].value = def.find(x => x.Id === filtEf[l].Name).Path;
-																ef.Freguesia.addEventListener("click", el4 =>
-																{
-																	span.innerHTML = el4.target.id.split('(')[0] + '(Ex freguesia)';
-																	svgDoc.children[0].setAttribute(`viewBox`, `${tgta.x-((width/z)/2)} ${tgta.y-((height/z)/2)} ${width/z} ${height/z}`);
-																});
-															}
-														}
-														let fLocs = filterLocs(el3.target.id.split('(')[0]);
-														if(fLocs.length > 0)
-														{
-															tempBox.H = tgt3.height;
-															tempBox.W = tgt3.width;
-															tempBox.X = tgt3.x;
-															tempBox.Y = tgt3.y;
-															let z = 200 / (tgt3.width + tgt3.height);
-															svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
-															for(let i = 0; i < fLocs.length; i++)
-															{
-																let loc = locs.find(x => x.Localidade.id === fLocs[i].Name);
-																loc.Localidade.attributes[0].value = dl.find(x => x.Id === fLocs[i].Name).Path;
-																loc.Localidade.addEventListener("click", el5 =>
-																{
-																	span.innerHTML = fLocs[i].Name.split('(')[0];
-																	svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
-																});
-															}
-														}
-														if(filtEf.length < 2 && fLocs < 1 && !(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#')))
-														{
-															hidePins();
-															z = 200 / (tgt2.width + tgt2.height);
-															svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
-														}
-													});
-													let fregPins = filterPins(currFreg.id);
-													for(l = 0; l < fregPins.length; l=l+2)
-													{	
-															fregPins[l].addEventListener("mouseover", el5 =>
-														{
-																	let m;
-																	if(selPin === '')
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																			{
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = "";
-																				else
-																				{
-																					fregPins[m].attributes[5].value = "";
-																					fregPins[m].attributes[7].value = 0;
-																					fregPins[m].attributes[8].value = 0;
-																				}
-																			}
-																});
-															fregPins[l].addEventListener("mouseout", el5 =>
-														{
-																	let m;
-																	if(selPin === '')
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																			{	
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
-																				else
-																				{
-																					fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
-																					fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
-																					fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
-																				}
-																			}
-																});
-															fregPins[l].addEventListener("click", el5 =>
-														{	
-																	let idx = fregPins.indexOf(fregPins.find(fp => fp.id === el5.target.attributes[3].value));
-																	let tgt5 = fregPins[idx+1].getBBox();
-																	let z = 160 / (tgt5.width + tgt5.height);
-																	svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
-																	span.innerHTML = fregPins[idx+1].attributes[4].value;
-																	if(el5.target.id.split(':')[0] === selPin.split(':')[0])
-																	{
-																		selPin = '';
-																		let m;
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																			{	
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
-																				else
-																				{
-																					fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
-																					fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
-																					fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
-																				}
-																			}
-																	}
-																	else if(selPin === '')
-																	{
-																		selPin = el5.target.id;
-																		let m;
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																			{	
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = "";
-																				else
-																				{
-																					fregPins[m].attributes[5].value = "";
-																					fregPins[m].attributes[7].value = 0;
-																					fregPins[m].attributes[8].value = 0;
-																				}
-																			}
-																	}
-																	
-																});
-															fregPins[l+1].addEventListener("mouseover", el5 =>
-														{
-																	let m;
-																	if(selPin === '')
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																			{	
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = "";
-																				else
-																				{
-																					fregPins[m].attributes[5].value = "";
-																					fregPins[m].attributes[7].value = 0;
-																					fregPins[m].attributes[8].value = 0;
-																				}
-																			}
-																});
-															fregPins[l+1].addEventListener("mouseout", el5 =>
-														{
-																	let m;
-																	if(selPin === '')
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
-																				else
-																				{
-																					fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
-																					fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
-																					fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
-																				}
-																});
-															fregPins[l+1].addEventListener("click", el5 =>
-														{
-																	let tgt5 = el5.target.getBBox();
-																	let z = 160 / (tgt5.width + tgt5.height);
-																	svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
-																	span.innerHTML = el5.target.attributes[4].value;
-																	if(el5.target.id.split(':')[0] === selPin.split(':')[0])
-																	{
-																		selPin = '';
-																		let m;
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																			{	
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
-																				else
-																				{
-																					fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
-																					fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
-																					fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
-																				}
-																			}
-																	}
-																	else if(selPin === '')
-																	{
-																		selPin = el5.target.id;
-																		let m;
-																		for(m = 0; m < fregPins.length; m++)
-																			if(fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
-																			{	
-																				if(m % 2 === 0)
-																					fregPins[m].attributes[0].value = "";
-																				else
-																				{
-																					fregPins[m].attributes[5].value = "";
-																					fregPins[m].attributes[7].value = 0;
-																					fregPins[m].attributes[8].value = 0;
-																				}
-																			}
-																	}
-																});
-													}
-												}
-											}
-										});
-									}	
-								}
-							});
-					}
-				}
-				
-				play.addEventListener("click", () => 
-				{
-						play.style.visibility="hidden";
-						/*x = Math.floor((Math.random() * 278)+1);
-						goal = Concelhos[x].id;
-						span.innerHTML = `Where is ${goal}?`;
-						guess = "";
-						tries = 3;
-						game = false;
-						lose = false;*/
-						showDists();
-				});
-				
-			}, 2500);
-		</script>
-    </body>
+ <!DOCTYPE html>
+ <!--[if lt IE 7]>  <html class = "no-js lt-ie9 lt-ie8 lt-ie7">  <![endif]-->
+     <!--[if IE 7]>  <html class = "no-js lt-ie9 lt-ie8">  <![endif]-->
+     <!--[if IE 8]>  <html class = "no-js lt-ie9">  <![endif]-->
+     <!--[if gt IE 8]>  <!-->  <html class = "no-js">  <!-- <![endif]-->
+     <head>
+     <meta charset = "utf-8">
+     <meta http - equiv = "X-UA-Compatible" content = "IE=edge">
+     <meta name = "description" content = "">
+     <meta name = "viewport" content = "width=device-width, initial-scale=1">
+     <title> Portugal </title>
+     </head>
+     <body style = "">
+     <!--[if lt IE 7]>
+     <p class = "browsehappy"> You are using an <strong> outdated </strong> browser.Please <a href = "#"> upgrade your browser </a> to improve your experience. </p>
+     <![endif]-->
+     <object class = "map" id = "svgmap" type = "image/svg+xml" data = "map.svg">
+     </object>
+     <span id = "span">  </span>
+     <button type = "button" id = "game"> Play! </button>
+     <button type = "button" id = "reset"> Reset </button>
+     <span id = "goalText">  </span>
+     <script>
+    setTimeout(function () {
+    const width = 250;
+    const height = 366;
+    const a = document.getElementById("svgmap");
+    const svgDoc = a.contentDocument;
+    const Portugal = svgDoc.getElementsByClassName('País');
+    const Distritos = svgDoc.getElementsByClassName('Distritos');
+    const Exclaves = svgDoc.getElementsByClassName('exclave');
+    const Ilhas = svgDoc.getElementsByClassName('ilha');
+    const Exfregs = svgDoc.getElementsByClassName('exfreg');
+    const Locs = svgDoc.getElementsByClassName('locs');
+    const Pins = svgDoc.getElementsByClassName('pins');
+    let dists = new Array();
+    let concs = new Array();
+    let fregsall = new Array();
+    let fregs = new Array();
+    let exfregs = new Array();
+    let locs = new Array();
+    let pins = new Array();
+    let dp = new Array();
+    let dd = new Array();
+    let dc = new Array();
+    let df = new Array();
+    let def = new Array();
+    let dl = new Array();
+    let dpins = new Array();
+    let selPin = '';
+    let tempBox = {
+        H: 0,
+        W: 0,
+        X: 0,
+        Y: 0
+    }
+    let tempBox2 = {
+        H: 0,
+        W: 0,
+        X: 0,
+        Y: 0
+    }
+    let loaded = new Array();
+    for (let q = 0; q <Pins.length; q++)
+        if (q % 2 === 0)
+            dpins.push({
+                Id: Pins[q].attributes[3].value,
+                Pin: Pins[q].attributes[0].value
+            }); //Pins
+    else
+        dpins.push({
+            Id: Pins[q].attributes[3].value,
+            Desc: Pins[q].attributes[4].value,
+            Image: Pins[q].attributes[5].value,
+            Pin: Pins[q].attributes[0].value,
+            W: Pins[q].attributes[8].value,
+            H: Pins[q].attributes[7].value
+        }); //Images of pins
+    for (let i = 0; i <Distritos.length; i++) {
+        let strAux = Distritos[i].id.split('(')[0];
+        strAux = strAux == "Bragança" ? "Braganca" : strAux;
+        strAux = strAux == "Castelo Branco" ? "CB" : strAux;
+        strAux = strAux == "Évora" ? "Evora" : strAux;
+        strAux = strAux == "Santarém" ? "Santarem" : strAux;
+        strAux = strAux == "Setúbal" ? "Setubal" : strAux;
+        strAux = strAux == "Viana do Castelo" ? "VC" : strAux;
+        strAux = strAux == "Vila Real" ? "VR" : strAux;
+        for (let j = 0; j <svgDoc.getElementsByClassName(strAux).length; j++) {
+            test = svgDoc.getElementsByClassName(strAux)[j].id;
+            test = test.replace(/ +/g, "");
+            test = test.toLowerCase();
+            test = test.split('(')[0] + "freg";
+            for (let k = 0; k <svgDoc.getElementsByClassName(test).length; k++) {
+                if (!(svgDoc.getElementsByClassName(test)[k].id in Exclaves || svgDoc.getElementsByClassName(test)[k].id in Ilhas || svgDoc.getElementsByClassName(test)[k].id in Exfregs || svgDoc.getElementsByClassName(test)[k].id in Locs))
+                    fregs.push({
+                        Name: svgDoc.getElementsByClassName(test)[k].id,
+                        Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
+                        Distrito: Distritos[i].id.split('(')[0],
+                        Freguesia: svgDoc.getElementsByClassName(test)[k]
+                    });
+                else if (svgDoc.getElementsByClassName(test)[k].id in Exfregs)
+                    exfregs.push({
+                        Name: svgDoc.getElementsByClassName(test)[k].id,
+                        Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
+                        Distrito: Distritos[i].id.split('(')[0],
+                        Freguesia: svgDoc.getElementsByClassName(test)[k]
+                    });
+                else if (svgDoc.getElementsByClassName(test)[k].id in Locs)
+                    locs.push({
+                        Name: svgDoc.getElementsByClassName(test)[k].id,
+                        Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
+                        Distrito: Distritos[i].id.split('(')[0],
+                        Localidade: svgDoc.getElementsByClassName(test)[k]
+                    });
+                fregsall.push({
+                    Name: svgDoc.getElementsByClassName(test)[k].id,
+                    Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
+                    Distrito: Distritos[i].id.split('(')[0],
+                    Freguesia: svgDoc.getElementsByClassName(test)[k]
+                });
+            }
+            concs.push({
+                Name: svgDoc.getElementsByClassName(strAux)[j].id,
+                Distrito: Distritos[i].id.split('(')[0],
+                Concelho: svgDoc.getElementsByClassName(strAux)[j],
+                Freguesias: svgDoc.getElementsByClassName(test)
+            });
+        }
+        dists.push({
+            Name: Distritos[i].id,
+            Distrito: Distritos[i],
+            Concelhos: svgDoc.getElementsByClassName(strAux),
+            Freguesias: svgDoc.getElementsByClassName("freg" + strAux.toLowerCase())
+        });
+    };
+    dp.push({
+        Path: Portugal[0].attributes[0].value,
+        Id: Portugal[0].id
+    });
+    for (let i = 0; i <Pins.length; i++)
+        pins.push(Pins[i]);
+    for (let i = 0; i <dists.length; i++)
+        dd.push({
+            Path: dists[i].Distrito.attributes[0].value,
+            Id: Distritos[i].id
+        });
+    for (let i = 0; i <concs.length; i++)
+        dc.push({
+            Path: concs[i].Concelho.attributes[0].value,
+            Id: concs[i].Name
+        });
+    for (let i = 0; i <fregsall.length; i++)
+        if (!(fregsall[i].Name.includes('exfreg')))
+            df.push({
+                Path: fregsall[i].Freguesia.attributes[0].value,
+                Id: fregsall[i].Name
+            });
+    for (let i = 0; i <exfregs.length; i++)
+        def.push({
+            Path: exfregs[i].Freguesia.attributes[0].value,
+            Id: exfregs[i].Name
+        });
+    for (let i = 0; i <locs.length; i++)
+        dl.push({
+            Path: locs[i].Localidade.attributes[0].value,
+            Id: locs[i].Name
+        });
+    for (let cfregs = 0; cfregs <dists.length; cfregs++)
+        console.log("Freguesias de " + dists[cfregs].Name.split('(')[0] + ": " + filterItems(dists[cfregs].Name.split('(')[0]).length);
+    console.log("\nTotal de freguesias: " + parseInt(fregs.length));
+    const span = document.getElementById("span");
+    const btn = document.getElementById("reset");
+    const play = document.getElementById("game");
+    const goalText = document.getElementById("goalText");
+    btn.style.visibility = "hidden";
+
+    let x = Math.floor((Math.random() * fregsall.length) + 1);
+    //let goal = Concelhos[x].id;
+    let guess = "";
+    let tries = Number.MAX_SAFE_INTEGER;
+    let lose = false;
+    let game = false;
+
+    for (let i = 0; i <dists.length; i++)
+        dists[i].Distrito.attributes[0].value = "";
+    for (let i = 0; i <concs.length; i++)
+        concs[i].Concelho.attributes[0].value = "";
+    for (let i = 0; i <fregsall.length; i++)
+        fregsall[i].Freguesia.attributes[0].value = "";
+    for (let i = 0; i <fregs.length; i++)
+        fregs[i].Freguesia.attributes[0].value = "";
+    for (let i = 0; i <exfregs.length; i++)
+        exfregs[i].Freguesia.attributes[0].value = "";
+    for (let i = 0; i <locs.length; i++)
+        locs[i].Localidade.attributes[0].value = "";
+    function hidePins() {
+        for (let i = 0; i <Pins.length; i++)
+            if (i % 2 === 0)
+                Pins[i].attributes[0].value = "";
+            else {
+                Pins[i].attributes[5].value = "";
+                Pins[i].attributes[7].value = 0;
+                Pins[i].attributes[8].value = 0;
+            }
+    }
+    hidePins();
+
+    function answer(a, b) {
+        return (a === b);
+    }
+
+    function bigger(a, b) {
+        return (a>= b ? a : b);
+    }
+
+    function smaller(a, b) {
+        return (a <b ? a : b);
+    }
+
+    function filterItems(dist) {
+        return fregs.filter(function (el) {
+            return el.Distrito.toLowerCase() === dist.toLowerCase();
+        })
+    }
+
+    function filterExFregs(freg) {
+        return exfregs.filter(function (el) {
+			if(freg.includes('loc#'))
+				return false;
+            return freg.toLowerCase().includes(el.Freguesia.id.split('(')[0].toLowerCase());
+        })
+    }
+
+    function filterLocs(freg) {
+        return locs.filter(function (el) {
+			if(freg.id !== undefined)
+				return freg.id.split(' ').join('_').toLowerCase() === el.Localidade.id.split('#')[1].split(')')[0].toLowerCase();
+			else
+				return freg.split(' ').join('_').toLowerCase() === el.Localidade.id.split('#')[1].split(')')[0].toLowerCase();
+        })
+    }
+
+    function filterPins(freg) {
+        return pins.filter(function (el) {
+            return el.id.split(':')[0].toLowerCase().includes(freg.split(' ').join('_').toLowerCase());
+        })
+    }
+
+    function cleanConcelhos() {
+        cleanFreguesias();
+        cleanExFreguesias();
+        cleanLocalidades();
+        for (let i = 0; i <dists.length; i++)
+            for (let j = 0; j <dists[i].Concelhos.length; j++)
+                dists[i].Concelhos[j].attributes[0].value = "";
+    }
+
+    function cleanFreguesias() {
+        for (let i = 0; i <fregsall.length; i++)
+            fregsall[i].Freguesia.attributes[0].value = "";
+        hidePins();
+    }
+
+    function cleanExFreguesias() {
+        for (let i = 0; i <exfregs.length; i++)
+            exfregs[i].Freguesia.attributes[0].value = "";
+    }
+
+    function cleanLocalidades() {
+        for (let i = 0; i <locs.length; i++)
+            locs[i].Localidade.attributes[0].value = "";
+    }
+
+    btn.addEventListener("click", reset);
+
+    function reset() {
+        selPin = '';
+        cleanConcelhos();
+        btn.style.visibility = "hidden";
+        span.innerHTML = "";
+        //span.innerHTML = `Where is ${goal}?`;
+        //if(game)
+        svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`);
+        /*else{
+        tries = 3
+        x = Math.floor((Math.random() * 278)+1);
+        goal = Concelhos[x].id;
+        svgDoc.children[0].setAttribute(`viewBox`, `0 0 ${width} ${height}`);
+        span.innerHTML = `Where is ${goal}?`;
+        //game = true;
+        }*/
+    }
+
+    function func(arr, str) {
+        return arr.find(p => p.Id.includes(str.replace(/ /g, '_')));
+    }
+    function showDists() {
+        Portugal[0].attributes[0].value = "";
+        for (let i = 0; i <dists.length; i++) {
+            dists[i].Distrito.attributes[0].value = dd[i].Path;
+            dists[i].Distrito.addEventListener("click", function (el) {
+                btn.style.visibility = "visible";
+                let x = el.clientX;
+                let y = el.clientY;
+
+                cleanConcelhos();
+                let tgt = el.target.getBBox();
+                let z = 180 / (tgt.width + tgt.height);
+                svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-((width/z)/2)} ${tgt.y-((height/z)/2)} ${width/z} ${height/z}`);
+                span.innerHTML = el.target.id;
+                for (let j = 0; j <dists[i].Concelhos.length; j++) {
+                    dists[i].Concelhos[j].attributes[0].value = dc.find(x => x.Id === dists[i].Concelhos[j].id).Path;
+                    if (!loaded.includes(dists[i].Concelhos[j].id)) {
+                        loaded.push(dists[i].Concelhos[j].id);
+                        dists[i].Concelhos[j].addEventListener("click", el2 => {
+                            /*if(game){
+                            if(answer(el2.target.id, goal)){
+                            tries = 3
+                            game=false;
+                            span.innerHTML = `Win(${el2.target.id})!`;
+                            btn.style.visibility="visible";
+                            }
+                            else{
+                            tries--;
+                            span.innerHTML = `Wrong(${el2.target.id})! Lives = ${tries}.`;
+                            if(tries <= 0){
+                            game=false;
+                            span.innerHTML += `\nLose...`;
+                            }
+                            }
+                            }
+                            else */
+                            let click = false;
+                            let tgt2 = el2.target.getBBox();
+                            let z = 185 / (tgt2.width + tgt2.height);
+                            svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
+                            span.innerHTML = el2.target.id;
+                            cleanFreguesias();
+                            cleanExFreguesias();
+                            let currConc = concs.find(x => x.Name === dists[i].Concelhos[j].id);
+                            for (k = 0; k <currConc.Freguesias.length; k++) {
+                                let currFreg = currConc.Freguesias[k];
+                                if (!(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#')))
+                                    currFreg.attributes[0].value = df.find(x => x.Id === currFreg.id).Path;
+                                if (loaded.find(lf => lf === currFreg.id) === undefined) {
+                                    loaded.push(currFreg.id);
+                                    currFreg.addEventListener("click", el3 => {
+										if(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))
+											return;
+                                        let tgt3 = el3.target.getBBox();
+                                        let z = 200 / (tgt3.width + tgt3.height);
+                                        selPin = '';
+                                        let fregPins = filterPins(el3.target.id);
+                                        if (!(el3.target.id.includes('exfreg') || el3.target.id.includes('#'))) {
+                                            cleanExFreguesias();
+                                            cleanLocalidades();
+                                        }
+
+                                        span.innerHTML = el3.target.id;
+                                        if (fregPins.length> 0) {
+                                            if (!(el3.target.id.includes('exfreg') || el3.target.id.includes('loc#')))
+                                                hidePins();
+                                            if (!(el3.target.id.includes('loc#'))) {
+                                                svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
+                                            }
+                                            let l;
+                                            for (l = 0; l <fregPins.length; l = l + 2) {
+                                                click = true;
+                                                fregPins[l].attributes[0].value = dpins.find(d => d.Id === fregPins[l].id).Pin;
+                                                fregPins[l + 1].attributes[5].value = dpins.find(d => d.Id === fregPins[l + 1].attributes[3].value).Image;
+                                                fregPins[l + 1].attributes[7].value = dpins.find(d => d.Id === fregPins[l + 1].attributes[3].value).H;
+                                                fregPins[l + 1].attributes[8].value = dpins.find(d => d.Id === fregPins[l + 1].attributes[3].value).W;
+                                            }
+                                        }
+                                        let filtEf = filterExFregs(el3.target.id);
+                                        if (filtEf.length> 1) {
+                                            let tgta = el3.target.getBBox();
+                                            let z = 200 / (tgta.width + tgta.height);
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgta.x-((width/z)/2)} ${tgta.y-((height/z)/2)} ${width/z} ${height/z}`);
+                                            for (let l = 0; l <filtEf.length; l++) {
+                                                let ef = exfregs.find(x => x.Freguesia.id === filtEf[l].Name);
+                                                ef.Freguesia.attributes[0].value = def.find(x => x.Id === filtEf[l].Name).Path;
+                                            }
+                                        }
+                                        let fLocs = filterLocs(el3.target.id.split('(')[0]);
+                                        if (fLocs.length> 0) {
+                                            tempBox.H = tgt3.height;
+                                            tempBox.W = tgt3.width;
+                                            tempBox.X = tgt3.x;
+                                            tempBox.Y = tgt3.y;
+                                            let z = 200 / (tgt3.width + tgt3.height);
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
+                                            for (let i = 0; i <fLocs.length; i++) {
+                                                let loc = locs.find(x => x.Localidade.id === fLocs[i].Name);
+                                                loc.Localidade.attributes[0].value = dl.find(x => x.Id === fLocs[i].Name).Path;
+                                            }
+                                        }
+                                        if (filtEf.length <2 && fLocs <1 && !(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))) {
+                                            hidePins();
+                                            z = 200 / (tgt2.width + tgt2.height);
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
+                                        }
+                                    });
+                                    let fregPins = filterPins(currFreg.id);
+                                    for (l = 0; l <fregPins.length; l = l + 2) {
+                                        fregPins[l].addEventListener("mouseover", el5 => {
+                                            let m;
+                                            if (selPin === '')
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0])) {
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = "";
+                                                        else {
+                                                            fregPins[m].attributes[5].value = "";
+                                                            fregPins[m].attributes[7].value = 0;
+                                                            fregPins[m].attributes[8].value = 0;
+                                                        }
+                                                    }
+                                        });
+                                        fregPins[l].addEventListener("mouseout", el5 => {
+                                            let m;
+                                            if (selPin === '')
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0])) {
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
+                                                        else {
+                                                            fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
+                                                            fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
+                                                            fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
+                                                        }
+                                                    }
+                                        });
+                                        fregPins[l].addEventListener("click", el5 => {
+                                            let idx = fregPins.indexOf(fregPins.find(fp => fp.id === el5.target.attributes[3].value));
+                                            let tgt5 = fregPins[idx + 1].getBBox();
+                                            let z = 160 / (tgt5.width + tgt5.height);
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+                                            span.innerHTML = fregPins[idx + 1].attributes[4].value;
+                                            if (el5.target.id.split(':')[0] === selPin.split(':')[0]) {
+                                                selPin = '';
+                                                let m;
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0])) {
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
+                                                        else {
+                                                            fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
+                                                            fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
+                                                            fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
+                                                        }
+                                                    }
+                                            } else if (selPin === '') {
+                                                selPin = el5.target.id;
+                                                let m;
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0])) {
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = "";
+                                                        else {
+                                                            fregPins[m].attributes[5].value = "";
+                                                            fregPins[m].attributes[7].value = 0;
+                                                            fregPins[m].attributes[8].value = 0;
+                                                        }
+                                                    }
+                                            }
+
+                                        });
+                                        fregPins[l + 1].addEventListener("mouseover", el5 => {
+                                            let m;
+                                            if (selPin === '')
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0])) {
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = "";
+                                                        else {
+                                                            fregPins[m].attributes[5].value = "";
+                                                            fregPins[m].attributes[7].value = 0;
+                                                            fregPins[m].attributes[8].value = 0;
+                                                        }
+                                                    }
+                                        });
+                                        fregPins[l + 1].addEventListener("mouseout", el5 => {
+                                            let m;
+                                            if (selPin === '')
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0]))
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
+                                                        else {
+                                                            fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
+                                                            fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
+                                                            fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
+                                                        }
+                                        });
+                                        fregPins[l + 1].addEventListener("click", el5 => {
+                                            let tgt5 = el5.target.getBBox();
+                                            let z = 160 / (tgt5.width + tgt5.height);
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
+                                            span.innerHTML = el5.target.attributes[4].value;
+                                            if (el5.target.id.split(':')[0] === selPin.split(':')[0]) {
+                                                selPin = '';
+                                                let m;
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0])) {
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = dpins.find(d => d.Id === fregPins[m].id).Pin;
+                                                        else {
+                                                            fregPins[m].attributes[5].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).Image;
+                                                            fregPins[m].attributes[7].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).H;
+                                                            fregPins[m].attributes[8].value = dpins.find(d => d.Id === fregPins[m].attributes[3].value).W;
+                                                        }
+                                                    }
+                                            } else if (selPin === '') {
+                                                selPin = el5.target.id;
+                                                let m;
+                                                for (m = 0; m <fregPins.length; m++)
+                                                    if (fregPins[m].attributes[3].value.includes(currFreg.id.replace(/ /g, '_')) && !(fregPins[m].attributes[3].value.split(':')[0] === el5.target.attributes[3].value.split(':')[0])) {
+                                                        if (m % 2 === 0)
+                                                            fregPins[m].attributes[0].value = "";
+                                                        else {
+                                                            fregPins[m].attributes[5].value = "";
+                                                            fregPins[m].attributes[7].value = 0;
+                                                            fregPins[m].attributes[8].value = 0;
+                                                        }
+                                                    }
+                                            }
+                                        });
+
+                                    }
+                                    let filtEf = filterExFregs(currFreg.id);
+									let tgta = currFreg.getBBox();
+									let zef = 200 / (tgta.width + tgta.height);
+                                    for (let l = 0; l <filtEf.length; l++) {
+										let ef = exfregs.find(x => x.Freguesia.id === filtEf[l].Name);
+										loaded.push(ef.Name);
+                                        ef.Freguesia.addEventListener("click", el4 => {
+                                            span.innerHTML = el4.target.id.split('(')[0] + '(Ex freguesia)';
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgta.x-((width/zef)/2)} ${tgta.y-((height/zef)/2)} ${width/zef} ${height/zef}`);
+                                        });
+                                    }
+                                    let fLocs = filterLocs(currFreg);
+									let tgt3 = currFreg.getBBox();
+									let zl = 200 / (tgt3.width + tgt3.height);
+                                    for (let i = 0; i <fLocs.length; i++) {
+                                        let loc = locs.find(x => x.Localidade.id === fLocs[i].Name);
+                                        loc.Localidade.addEventListener("click", el5 => {
+                                            span.innerHTML = fLocs[i].Name.split('(')[0];
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/zl)/2)} ${tgt3.y-((height/zl)/2)} ${width/zl} ${height/zl}`);
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    play.addEventListener("click", () => {
+        play.style.visibility = "hidden";
+        /*x = Math.floor((Math.random() * 278)+1);
+        goal = Concelhos[x].id;
+        span.innerHTML = `Where is ${goal}?`;
+        guess = "";
+        tries = 3;
+        game = false;
+        lose = false;*/
+        showDists();
+    });
+
+}, 2500);
+ </script>
+ </body>
 </html>
