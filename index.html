@@ -227,6 +227,8 @@
         return exfregs.filter(function (el) {
 			if(freg.includes('loc#'))
 				return false;
+			if(freg.includes('('))
+				return freg.split('(')[1].toLowerCase().includes(el.Freguesia.id.split('(')[0].toLowerCase());
             return freg.toLowerCase().includes(el.Freguesia.id.split('(')[0].toLowerCase());
         })
     }
@@ -332,7 +334,7 @@
                             else */
                             let click = false;
                             let tgt2 = el2.target.getBBox();
-                            let z = 185 / (tgt2.width + tgt2.height);
+                            let z = 215 / (tgt2.width + tgt2.height);
                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
                             span.innerHTML = el2.target.id;
                             cleanFreguesias();
@@ -397,7 +399,7 @@
                                         }
                                         if (filtEf.length <2 && fLocs <1 && !(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))) {
                                             hidePins();
-                                            z = 200 / (tgt2.width + tgt2.height);
+                                            z = 215 / (tgt2.width + tgt2.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
                                         }
                                     });
@@ -535,7 +537,7 @@
 										let ef = exfregs.find(x => x.Freguesia.id === filtEf[l].Name);
 										loaded.push(ef.Name);
                                         ef.Freguesia.addEventListener("click", el4 => {
-                                            span.innerHTML = el4.target.id.split('(')[0] + '(Ex freguesia)';
+                                            span.innerHTML = el4.target.id.split('(')[0];
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgta.x-((width/zef)/2)} ${tgta.y-((height/zef)/2)} ${width/zef} ${height/zef}`);
                                         });
                                     }
