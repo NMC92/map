@@ -397,7 +397,7 @@
                                                 loc.Localidade.attributes[0].value = dl.find(x => x.Id === fLocs[i].Name).Path;
                                             }
                                         }
-                                        if (filtEf.length <2 && fLocs <1 && !(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))) {
+                                        if (filtEf.length <2 && fLocs <1 && fregPins.length === 0 && !(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))) {
                                             hidePins();
                                             z = 215 / (tgt2.width + tgt2.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
