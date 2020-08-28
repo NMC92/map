@@ -33,20 +33,20 @@
     const Exfregs = svgDoc.getElementsByClassName('exfreg');
     const Locs = svgDoc.getElementsByClassName('locs');
     const Pins = svgDoc.getElementsByClassName('pins');
-    let dists = new Array();
-    let concs = new Array();
-    let fregsall = new Array();
-    let fregs = new Array();
-    let exfregs = new Array();
-    let locs = new Array();
-    let pins = new Array();
-    let dp = new Array();
-    let dd = new Array();
-    let dc = new Array();
-    let df = new Array();
-    let def = new Array();
-    let dl = new Array();
-    let dpins = new Array();
+    let dists = [];
+    let concs = [];
+    let fregsall = [];
+    let fregs = [];
+    let exfregs = [];
+    let locs = [];
+    let pins = [];
+    let dp = [];
+    let dd = [];
+    let dc = [];
+    let df = [];
+    let def = [];
+    let dl = [];
+    let dpins = [];
     let selPin = '';
     let tempBox = {
         H: 0,
@@ -60,7 +60,7 @@
         X: 0,
         Y: 0
     }
-    let loaded = new Array();
+    let loaded = [];
     for (let q = 0; q <Pins.length; q++)
         if (q % 2 === 0)
             dpins.push({
@@ -238,7 +238,7 @@
 			if(freg.id !== undefined)
 				return freg.id.split(' ').join('_').toLowerCase() === el.Localidade.id.split('#')[1].split(')')[0].toLowerCase();
 			else
-				return freg.split(' ').join('_').toLowerCase() === el.Localidade.id.split('#')[1].split(')')[0].toLowerCase();
+				return freg.split(' ').join('_').toLowerCase() === el.Localidade.id.split('#')[1].split(')')[0].split(' ').join('_').toLowerCase();
         })
     }
 
@@ -348,7 +348,10 @@
                                     loaded.push(currFreg.id);
                                     currFreg.addEventListener("click", el3 => {
 										if(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))
+										{
+											span.innerHTML = currFreg.id.split('(')[0];
 											return;
+										}
                                         let tgt3 = el3.target.getBBox();
                                         let z = 200 / (tgt3.width + tgt3.height);
                                         selPin = '';
