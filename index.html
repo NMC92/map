@@ -16,14 +16,14 @@
      <![endif]-->
      <object class = "map" id = "svgmap" type = "image/svg+xml" data = "map.svg">
      </object>
-     <span id = "span">  </span>
+     <span id = "span" style="font-size:24px">  </span>
      <button type = "button" id = "game"> Play! </button>
      <button type = "button" id = "reset"> Reset </button>
      <span id = "goalText">  </span>
      <script>
     setTimeout(function () {
-    const width = 250;
-    const height = 366;
+    const width = 500;
+    const height = 732;
     const a = document.getElementById("svgmap");
     const svgDoc = a.contentDocument;
     const Portugal = svgDoc.getElementsByClassName('País');
@@ -307,7 +307,7 @@
 
                 cleanConcelhos();
                 let tgt = el.target.getBBox();
-                let z = 180 / (tgt.width + tgt.height);
+                let z = 360 / (tgt.width + tgt.height);
                 svgDoc.children[0].setAttribute(`viewBox`, `${tgt.x-((width/z)/2)} ${tgt.y-((height/z)/2)} ${width/z} ${height/z}`);
                 span.innerHTML = el.target.id;
                 for (let j = 0; j <dists[i].Concelhos.length; j++) {
@@ -334,7 +334,7 @@
                             else */
                             let click = false;
                             let tgt2 = el2.target.getBBox();
-                            let z = 215 / (tgt2.width + tgt2.height);
+                            let z = 430 / (tgt2.width + tgt2.height);
                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
                             span.innerHTML = el2.target.id;
                             cleanFreguesias();
@@ -353,7 +353,7 @@
 											return;
 										}
                                         let tgt3 = el3.target.getBBox();
-                                        let z = 200 / (tgt3.width + tgt3.height);
+                                        let z = 400 / (tgt3.width + tgt3.height);
                                         selPin = '';
                                         let fregPins = filterPins(el3.target.id);
                                         if (!(el3.target.id.includes('exfreg') || el3.target.id.includes('#'))) {
@@ -380,7 +380,7 @@
                                         let filtEf = filterExFregs(el3.target.id);
                                         if (filtEf.length> 1) {
                                             let tgta = el3.target.getBBox();
-                                            let z = 200 / (tgta.width + tgta.height);
+                                            let z = 380 / (tgta.width + tgta.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgta.x-((width/z)/2)} ${tgta.y-((height/z)/2)} ${width/z} ${height/z}`);
                                             for (let l = 0; l <filtEf.length; l++) {
                                                 let ef = exfregs.find(x => x.Freguesia.id === filtEf[l].Name);
@@ -393,7 +393,7 @@
                                             tempBox.W = tgt3.width;
                                             tempBox.X = tgt3.x;
                                             tempBox.Y = tgt3.y;
-                                            let z = 200 / (tgt3.width + tgt3.height);
+                                            let z = 380 / (tgt3.width + tgt3.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/z)/2)} ${tgt3.y-((height/z)/2)} ${width/z} ${height/z}`);
                                             for (let i = 0; i <fLocs.length; i++) {
                                                 let loc = locs.find(x => x.Localidade.id === fLocs[i].Name);
@@ -402,7 +402,7 @@
                                         }
                                         if (filtEf.length <2 && fLocs <1 && fregPins.length === 0 && !(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))) {
                                             hidePins();
-                                            z = 215 / (tgt2.width + tgt2.height);
+                                            z = 430 / (tgt2.width + tgt2.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
                                         }
                                     });
@@ -439,7 +439,7 @@
                                         fregPins[l].addEventListener("click", el5 => {
                                             let idx = fregPins.indexOf(fregPins.find(fp => fp.id === el5.target.attributes[3].value));
                                             let tgt5 = fregPins[idx + 1].getBBox();
-                                            let z = 160 / (tgt5.width + tgt5.height);
+                                            let z = 320 / (tgt5.width + tgt5.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
                                             span.innerHTML = fregPins[idx + 1].attributes[4].value;
                                             if (el5.target.id.split(':')[0] === selPin.split(':')[0]) {
@@ -500,7 +500,7 @@
                                         });
                                         fregPins[l + 1].addEventListener("click", el5 => {
                                             let tgt5 = el5.target.getBBox();
-                                            let z = 160 / (tgt5.width + tgt5.height);
+                                            let z = 320 / (tgt5.width + tgt5.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
                                             span.innerHTML = el5.target.attributes[4].value;
                                             if (el5.target.id.split(':')[0] === selPin.split(':')[0]) {
@@ -535,7 +535,7 @@
                                     }
                                     let filtEf = filterExFregs(currFreg.id);
 									let tgta = currFreg.getBBox();
-									let zef = 200 / (tgta.width + tgta.height);
+									let zef = 380 / (tgta.width + tgta.height);
                                     for (let l = 0; l <filtEf.length; l++) {
 										let ef = exfregs.find(x => x.Freguesia.id === filtEf[l].Name);
 										loaded.push(ef.Name);
@@ -545,18 +545,18 @@
                                         });
                                     }
                                     let fLocs = filterLocs(currFreg);
-									let tgt3 = currFreg.getBBox();
-									let zl = 200 / (tgt3.width + tgt3.height);
+									let tgtb = currFreg.getBBox();
+									let zl = 380 / (tgtb.width + tgtb.height);
                                     for (let i = 0; i <fLocs.length; i++) {
                                         let loc = locs.find(x => x.Localidade.id === fLocs[i].Name);
                                         loc.Localidade.addEventListener("click", el5 => {
                                             span.innerHTML = fLocs[i].Name.split('(')[0];
-                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgt3.x-((width/zl)/2)} ${tgt3.y-((height/zl)/2)} ${width/zl} ${height/zl}`);
+                                            svgDoc.children[0].setAttribute(`viewBox`, `${tgtb.x-((width/zl)/2)} ${tgtb.y-((height/zl)/2)} ${width/zl} ${height/zl}`);
                                         });
                                     }
                                 }
                             }
-                        });
+                        });4
                     }
                 }
             });
