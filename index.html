@@ -18,6 +18,7 @@
      </object>
      <span id = "span" style="font-size:24px">  </span>
      <button type = "button" id = "game"> Play! </button>
+	 <span id="container" style="font-size:24px"></span>
      <button type = "button" id = "reset"> Reset </button>
      <span id = "goalText">  </span>
      <script>
@@ -47,7 +48,10 @@
     let def = [];
     let dl = [];
     let dpins = [];
+	let dpinsaux = [];
     let selPin = '';
+	let container = document.getElementById('container');
+	let generate = document.getElementById('generate');
     let tempBox = {
         H: 0,
         W: 0,
@@ -67,15 +71,15 @@
                 Id: Pins[q].attributes[3].value,
                 Pin: Pins[q].attributes[0].value
             }); //Pins
-    else
-        dpins.push({
-            Id: Pins[q].attributes[3].value,
-            Desc: Pins[q].attributes[4].value,
-            Image: Pins[q].attributes[5].value,
-            Pin: Pins[q].attributes[0].value,
-            W: Pins[q].attributes[8].value,
-            H: Pins[q].attributes[7].value
-        }); //Images of pins
+		else
+			dpins.push({
+				Id: Pins[q].attributes[3].value,
+				Desc: Pins[q].attributes[4].value,
+				Image: Pins[q].attributes[5].value,
+				Pin: Pins[q].attributes[0].value,
+				W: Pins[q].attributes[8].value,
+				H: Pins[q].attributes[7].value
+			}); //Images of pins
     for (let i = 0; i <Distritos.length; i++) {
         let strAux = Distritos[i].id.split('(')[0];
         strAux = strAux == "Bragança" ? "Braganca" : strAux;
@@ -276,6 +280,7 @@
     btn.addEventListener("click", reset);
 
     function reset() {
+		container.innerHTML = '';
         selPin = '';
         cleanConcelhos();
         btn.style.visibility = "hidden";
@@ -296,6 +301,26 @@
     function func(arr, str) {
         return arr.find(p => p.Id.includes(str.replace(/ /g, '_')));
     }
+	
+	function orderPins(pins)
+	{
+		let auxPins = [];
+		let auxPins2 = [];
+		for(let i = 1; i < pins.length; i+=2)
+		{
+			auxPins.push(pins[i]);
+		}
+		auxPins.sort(function(a, b) { if(a.attributes[4].value < b.attributes[4].value) { return -1; } if(a.attributes[4].value > b.attributes[4].value) { return 1; } return 0; });
+		for(let i = 0; i < auxPins.length; i++)
+		{
+			auxPins2.push(pins[pins.indexOf(pins.find(p => p.id.includes(':Img') && p.attributes[4].value === auxPins[i].attributes[4].value))-1]);
+			auxPins2.push(auxPins[i]);
+		}
+		return auxPins2;
+	}
+	
+	auxPins = orderPins(pins);
+	
     function showDists() {
         Portugal[0].attributes[0].value = "";
         for (let i = 0; i <dists.length; i++) {
@@ -347,6 +372,51 @@
                                 if (loaded.find(lf => lf === currFreg.id) === undefined) {
                                     loaded.push(currFreg.id);
                                     currFreg.addEventListener("click", el3 => {
+										if(!(el3.target.id.includes('exfreg') || el3.target.id.includes('#')))
+											container.innerHTML = '';
+										let fregPins = orderPins(filterPins(currFreg.id));
+										if(fregPins.length > 0)
+										{
+											let select = document.createElement("select");
+											for (let i = 0; i < fregPins.length; i+=2) 
+											{
+												var option = document.createElement("option");
+												option.value = fregPins[i];
+												option.text = fregPins[i+1].attributes[4].value;
+												select.appendChild(option);
+											}
+											select.addEventListener("change", op => 
+											{
+												let idx = pins.indexOf(pins.find(p => p.id.includes(':Img') && p.attributes[4].value === op.target.options.item(op.target.options.selectedIndex).text));
+												let pinTemp = pins[idx-1];
+												selPin = pinTemp.id;
+												for(let i = 0; i < fregPins.length; i+=2)
+												{
+													let tempPin2 = dpins.find(d => d.Id === fregPins[i].id);
+													let tempPin3 = dpins.find(d => d.Id === fregPins[i+1].id);
+													fregPins[i].attributes[0].value = tempPin2.Pin;
+													fregPins[i+1].attributes[5].value = tempPin3.Image;
+													fregPins[i+1].attributes[7].value = tempPin3.H;
+													fregPins[i+1].attributes[8].value = tempPin3.W;
+													if(fregPins[i].id.split(':')[0] !== pinTemp.id.split(':')[0])
+													{
+														fregPins[i].attributes[0].value = '';
+														fregPins[i+1].attributes[5].value = '';
+                                                        fregPins[i+1].attributes[7].value = 0;
+                                                        fregPins[i+1].attributes[8].value = 0;
+													}
+												}
+												let tempBBox = pins[idx].getBBox();
+												let z = 320 / (tempBBox.width + tempBBox.height);
+												svgDoc.children[0].setAttribute(`viewBox`, `${tempBBox.x-((width/z)/2)} ${tempBBox.y-((height/z)/2)} ${width/z} ${height/z}`);
+											});
+											var label = document.createElement("label");
+											label.innerHTML = "Destaques: "
+											container.appendChild(label).appendChild(select);
+										}
+										else if(!(currFreg.id.includes('exfreg') || currFreg.id.includes('#')))
+											hidePins();
+										
 										if(currFreg.id.includes('exfreg') || currFreg.id.includes('loc#'))
 										{
 											span.innerHTML = currFreg.id.split('(')[0];
@@ -355,14 +425,14 @@
                                         let tgt3 = el3.target.getBBox();
                                         let z = 400 / (tgt3.width + tgt3.height);
                                         selPin = '';
-                                        let fregPins = filterPins(el3.target.id);
+										
                                         if (!(el3.target.id.includes('exfreg') || el3.target.id.includes('#'))) {
                                             cleanExFreguesias();
                                             cleanLocalidades();
                                         }
 
                                         span.innerHTML = el3.target.id;
-                                        if (fregPins.length> 0) {
+                                        if (fregPins.length > 0) {
                                             if (!(el3.target.id.includes('exfreg') || el3.target.id.includes('loc#')))
                                                 hidePins();
                                             if (!(el3.target.id.includes('loc#'))) {
@@ -406,7 +476,8 @@
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt2.x-((width/z)/2)} ${tgt2.y-((height/z)/2)} ${width/z} ${height/z}`);
                                         }
                                     });
-                                    let fregPins = filterPins(currFreg.id);
+									
+									let fregPins = orderPins(filterPins(currFreg.id));									
                                     for (l = 0; l <fregPins.length; l = l + 2) {
                                         fregPins[l].addEventListener("mouseover", el5 => {
                                             let m;
@@ -556,7 +627,7 @@
                                     }
                                 }
                             }
-                        });4
+                        });
                     }
                 }
             });
@@ -575,7 +646,7 @@
         showDists();
     });
 
-}, 2500);
+}, 1500);
  </script>
  </body>
 </html>
