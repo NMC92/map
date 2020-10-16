@@ -28,6 +28,32 @@ path {
 	stroke-opacity:1
 }
 
+.Ilhas {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.6;
+	stroke-opacity: 1;
+}
+
+.Ilhas:hover {
+	fill: red;
+}
+
+.Ilhas:active {
+	fill: black;
+}
+
+.Ilhas {
+	fill: #ffefd5;
+	fill-opacity: 1;
+	fill-rule: evenodd;
+	stroke: #a1;
+	stroke-width: 0.1;
+	stroke-opacity: 1;
+}
+
 .Distritos {
 	fill: #ffefd5;
 	fill-opacity: 1;
