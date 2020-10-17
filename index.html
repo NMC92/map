@@ -327,6 +327,7 @@
         for (let i = 0; i <dists.length; i++) {
             dists[i].Distrito.attributes[0].value = dd[i].Path;
             dists[i].Distrito.addEventListener("click", function (el) {
+				container.innerHTML = '';
                 btn.style.visibility = "visible";
                 let x = el.clientX;
                 let y = el.clientY;
@@ -358,6 +359,7 @@
                             }
                             }
                             else */
+							container.innerHTML = '';
                             let click = false;
                             let tgt2 = el2.target.getBBox();
                             let z = 430 / (tgt2.width + tgt2.height);
