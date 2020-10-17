@@ -249,7 +249,8 @@
 
     function filterPins(freg) {
         return pins.filter(function (el) {
-            return el.id.split(':')[0].toLowerCase().includes(freg.split(' ').join('_').toLowerCase());
+			let sep = el.id.split(/[\s_][0-9]+/);
+            return sep[0].toLowerCase() === freg.split(' ').join('_').toLowerCase();
         })
     }
 
@@ -381,6 +382,10 @@
 										if(fregPins.length > 0)
 										{
 											let select = document.createElement("select");
+											var optionAux = document.createElement("option");
+											optionAux.value = null;
+											optionAux.text = "";
+											select.appendChild(optionAux);
 											for (let i = 0; i < fregPins.length; i+=2) 
 											{
 												var option = document.createElement("option");
@@ -390,28 +395,31 @@
 											}
 											select.addEventListener("change", op => 
 											{
-												let idx = pins.indexOf(pins.find(p => p.id.includes(':Img') && p.attributes[4].value === op.target.options.item(op.target.options.selectedIndex).text));
-												let pinTemp = pins[idx-1];
-												selPin = pinTemp.id;
-												for(let i = 0; i < fregPins.length; i+=2)
+												if(op.target.value !== "null")
 												{
-													let tempPin2 = dpins.find(d => d.Id === fregPins[i].id);
-													let tempPin3 = dpins.find(d => d.Id === fregPins[i+1].id);
-													fregPins[i].attributes[0].value = tempPin2.Pin;
-													fregPins[i+1].attributes[5].value = tempPin3.Image;
-													fregPins[i+1].attributes[7].value = tempPin3.H;
-													fregPins[i+1].attributes[8].value = tempPin3.W;
-													if(fregPins[i].id.split(':')[0] !== pinTemp.id.split(':')[0])
+													let idx = pins.indexOf(pins.find(p => p.id.includes(':Img') && p.attributes[4].value === op.target.options.item(op.target.options.selectedIndex).text));
+													let pinTemp = pins[idx-1];
+													selPin = pinTemp.id;
+													for(let i = 0; i < fregPins.length; i+=2)
 													{
-														fregPins[i].attributes[0].value = '';
-														fregPins[i+1].attributes[5].value = '';
-                                                        fregPins[i+1].attributes[7].value = 0;
-                                                        fregPins[i+1].attributes[8].value = 0;
+														let tempPin2 = dpins.find(d => d.Id === fregPins[i].id);
+														let tempPin3 = dpins.find(d => d.Id === fregPins[i+1].id);
+														fregPins[i].attributes[0].value = tempPin2.Pin;
+														fregPins[i+1].attributes[5].value = tempPin3.Image;
+														fregPins[i+1].attributes[7].value = tempPin3.H;
+														fregPins[i+1].attributes[8].value = tempPin3.W;
+														if(fregPins[i].id.split(':')[0] !== pinTemp.id.split(':')[0])
+														{
+															fregPins[i].attributes[0].value = '';
+															fregPins[i+1].attributes[5].value = '';
+															fregPins[i+1].attributes[7].value = 0;
+															fregPins[i+1].attributes[8].value = 0;
+														}
 													}
+													let tempBBox = pins[idx].getBBox();
+													let z = 200 / (tempBBox.width + tempBBox.height);
+													svgDoc.children[0].setAttribute(`viewBox`, `${tempBBox.x-((width/z)/2)} ${tempBBox.y-((height/z)/2)} ${width/z} ${height/z}`);
 												}
-												let tempBBox = pins[idx].getBBox();
-												let z = 320 / (tempBBox.width + tempBBox.height);
-												svgDoc.children[0].setAttribute(`viewBox`, `${tempBBox.x-((width/z)/2)} ${tempBBox.y-((height/z)/2)} ${width/z} ${height/z}`);
 											});
 											var label = document.createElement("label");
 											label.innerHTML = "Destaques: "
@@ -513,9 +521,12 @@
                                         fregPins[l].addEventListener("click", el5 => {
                                             let idx = fregPins.indexOf(fregPins.find(fp => fp.id === el5.target.attributes[3].value));
                                             let tgt5 = fregPins[idx + 1].getBBox();
-                                            let z = 320 / (tgt5.width + tgt5.height);
+                                            let z = 200 / (tgt5.width + tgt5.height);
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
                                             span.innerHTML = fregPins[idx + 1].attributes[4].value;
+											let option = Array.from(container.children[0].children[0].options).find(op => op.label === fregPins[idx + 1].attributes[4].value);
+											container.children[0].children[0].selectedIndex = option.index;
+											container.children[0].children[0].selectedOptions = option;
                                             if (el5.target.id.split(':')[0] === selPin.split(':')[0]) {
                                                 selPin = '';
                                                 let m;
@@ -574,9 +585,13 @@
                                         });
                                         fregPins[l + 1].addEventListener("click", el5 => {
                                             let tgt5 = el5.target.getBBox();
-                                            let z = 320 / (tgt5.width + tgt5.height);
+                                            let z = 200 / (tgt5.width + tgt5.height);
+											
                                             svgDoc.children[0].setAttribute(`viewBox`, `${tgt5.x-((width/z)/2)} ${tgt5.y-((height/z)/2)} ${width/z} ${height/z}`);
                                             span.innerHTML = el5.target.attributes[4].value;
+											let option = Array.from(container.children[0].children[0].options).find(op => op.label === el5.target.attributes[4].value);
+											container.children[0].children[0].selectedIndex = option.index;
+											container.children[0].children[0].selectedOptions = option;
                                             if (el5.target.id.split(':')[0] === selPin.split(':')[0]) {
                                                 selPin = '';
                                                 let m;
