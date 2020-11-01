@@ -52,7 +52,6 @@
 	let dpinsaux = [];
     let selPin = '';
 	let container = document.getElementById('container');
-	let generate = document.getElementById('generate');
     let tempBox = {
         H: 0,
         W: 0,
@@ -312,7 +311,7 @@
 		{
 			auxPins.push(pins[i]);
 		}
-		auxPins.sort(function(a, b) { if(a.attributes[4].value < b.attributes[4].value) { return -1; } if(a.attributes[4].value > b.attributes[4].value) { return 1; } return 0; });
+		auxPins.sort(function(a, b) { if(a.attributes[4].value.toLowerCase() < b.attributes[4].value.toLowerCase()) { return -1; } if(a.attributes[4].value > b.attributes[4].value) { return 1; } return 0; });
 		for(let i = 0; i < auxPins.length; i++)
 		{
 			auxPins2.push(pins[pins.indexOf(pins.find(p => p.id.includes(':Img') && p.attributes[4].value === auxPins[i].attributes[4].value))-1]);
