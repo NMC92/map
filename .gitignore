@@ -6,6 +6,7 @@ Thumbs.db
 *.exe
 *.pdb
 *.user
+*.json
 *.aps
 *.pch
 *.vspscc
@@ -19,10 +20,13 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+*.rtf
+*.md
 [Bb]in
 [Dd]ebug*/
 *.lib
 *.sbr
+*.hushlogin
 obj/
 [Rr]elease*/
 _ReSharper*/
