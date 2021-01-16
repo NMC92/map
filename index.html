@@ -2,32 +2,33 @@
  <!--[if lt IE 7]>  <html class = "no-js lt-ie9 lt-ie8 lt-ie7">  <![endif]-->
      <!--[if IE 7]>  <html class = "no-js lt-ie9 lt-ie8">  <![endif]-->
      <!--[if IE 8]>  <html class = "no-js lt-ie9">  <![endif]-->
-     <!--[if gt IE 8]>  <!-->  <html class = "no-js">  <!-- <![endif]-->
+     <!--[if gt IE 8]>  <!-->  <html class="no-js">  <!-- <![endif]-->
      <head>
-     <meta charset = "utf-8">
-     <meta http - equiv = "X-UA-Compatible" content = "IE=edge">
-     <meta name = "description" content = "">
-     <meta name = "viewport" content = "width=device-width, initial-scale=1">
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="description" content="">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
      <title> Portugal </title>
      </head>
-     <body style = "">
+     <body>
      <!--[if lt IE 7]>
      <p class = "browsehappy"> You are using an <strong> outdated </strong> browser.Please <a href = "#"> upgrade your browser </a> to improve your experience. </p>
      <![endif]-->
-     <object class = "map" id = "svgmap" type = "image/svg+xml" data = "map.svg">
+	 <object class="map" id="svgmap" type="image/svg+xml" data="map.svg" style="float:left">
      </object>
-     <span id = "span" style="font-size:24px">  </span>
-     <button type = "button" id = "game"> Play! </button>
-     <button type = "button" id = "reset"> Reset </button>
-	 <br>
-	 <span id="container" style="font-size:24px"></span>
-     <span id = "goalText">  </span>
+	 <div>
+		<span id="span" style="font-size:24px"></span>
+		<button type="button" id="game">Play!</button>
+		<button type="button" id="reset">Reset</button>
+		<br>
+		<span id="container" style="font-size:24px"></span>
+		<!--<span id="goalText"></span>-->
+	 </div>
      <script>
-    setTimeout(function () {
+	document.getElementById('svgmap').addEventListener('load', function(a){
     const width = 500;
     const height = 732;
-    const a = document.getElementById("svgmap");
-    const svgDoc = a.contentDocument;
+    const svgDoc = a.target.contentDocument;
     const Portugal = svgDoc.getElementsByClassName('País');
     const Distritos = svgDoc.getElementsByClassName('Distritos');
     const Exclaves = svgDoc.getElementsByClassName('exclave');
@@ -176,7 +177,7 @@
     const btn = document.getElementById("reset");
     const play = document.getElementById("game");
     const goalText = document.getElementById("goalText");
-    btn.style.visibility = "hidden";
+    btn.style.display = "none";
 
     let x = Math.floor((Math.random() * fregsall.length) + 1);
     //let goal = Concelhos[x].id;
@@ -284,7 +285,7 @@
 		container.innerHTML = '';
         selPin = '';
         cleanConcelhos();
-        btn.style.visibility = "hidden";
+        btn.style.display = "none";
         span.innerHTML = "";
         //span.innerHTML = `Where is ${goal}?`;
         //if(game)
@@ -335,7 +336,7 @@
             dists[i].Distrito.attributes[0].value = dd[i].Path;
             dists[i].Distrito.addEventListener("click", function (el) {
 				container.innerHTML = '';
-                btn.style.visibility = "visible";
+                btn.style.display = "inline-block";
                 let x = el.clientX;
                 let y = el.clientY;
 
@@ -659,7 +660,7 @@
     }
 
     play.addEventListener("click", () => {
-        play.style.visibility = "hidden";
+        play.style.display = "none";
         /*x = Math.floor((Math.random() * 278)+1);
         goal = Concelhos[x].id;
         span.innerHTML = `Where is ${goal}?`;
@@ -669,8 +670,7 @@
         lose = false;*/
         showDists();
     });
-
-}, 1500);
- </script>
+});
+	 </script>
  </body>
 </html>
