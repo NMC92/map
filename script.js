@@ -1,16 +1,30 @@
-$(document).ready(function()
+$(function()
 {
-	$('#svgmap').on('load', function(a) {
+	function objToStr(obj)
+	{
+		let s = [];
+		for(let i = 0; i < obj.length; i++)
+		{
+			if(obj[i].id.indexOf("(") !== -1)
+				s.push(obj[i].id.split('(')[0]);
+			else
+				s.push(obj[i].id);
+		}
+		return s;
+	}
+
+	$('#svg-map').on('load', function(a) {
 		const width = 500;
 		const height = 732;
 		const svgDoc = a.target.contentDocument;
-		const Portugal = svgDoc.getElementsByClassName('País');
-		const Distritos = svgDoc.getElementsByClassName('Distritos');
-		const Exclaves = svgDoc.getElementsByClassName('exclave');
-		const Ilhas = svgDoc.getElementsByClassName('ilha');
-		const Exfregs = svgDoc.getElementsByClassName('exfreg');
-		const Locs = svgDoc.getElementsByClassName('locs');
-		const Pins = svgDoc.getElementsByClassName('pins');
+		let $map = $(a.target.contentDocument);
+		const Portugal = $map.find('.País');
+		const Distritos = $map.find('.Distritos');
+		const Exclaves = $map.find('.exclave');
+		const Ilhas = $map.find('.ilha');
+		const Exfregs = $map.find('.exfreg');
+		const Locs = $map.find('.locs');
+		const Pins = $map.find('.pins');
 		let dists = [];
 		let concs = [];
 		let fregsall = [];
@@ -65,52 +79,53 @@ $(document).ready(function()
 			strAux = strAux == "Setúbal" ? "Setubal" : strAux;
 			strAux = strAux == "Viana do Castelo" ? "VC" : strAux;
 			strAux = strAux == "Vila Real" ? "VR" : strAux;
-			for (let j = 0; j < svgDoc.getElementsByClassName(strAux).length; j++) {
-				test = svgDoc.getElementsByClassName(strAux)[j].id;
-				test = test.replace(/ +/g, "");
-				test = test.toLowerCase();
-				test = test.split('(')[0] + "freg";
-				for (let k = 0; k < svgDoc.getElementsByClassName(test).length; k++) {
-					if (!(svgDoc.getElementsByClassName(test)[k].id in Exclaves || svgDoc.getElementsByClassName(test)[k].id in Ilhas || svgDoc.getElementsByClassName(test)[k].id in Exfregs || svgDoc.getElementsByClassName(test)[k].id in Locs))
+			let $tempDist = $map.find('.'+strAux);
+			for (let j = 0; j < $tempDist.length; j++) {
+				let $tempConc = $map.find('.'+$tempDist[j].id.replace(/ +/g, "").toLowerCase().split('(')[0] + "freg");
+				for (let k = 0; k < $tempConc.length; k++) {
+					if (!($tempConc[k].classList.contains('exclave') || $tempConc[k].classList.contains('ilha') 
+					|| $tempConc[k].classList.contains('exfreg') || $tempConc[k].classList.contains('locs')))
 						fregs.push({
-							Name: svgDoc.getElementsByClassName(test)[k].id,
-							Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
-							Distrito: Distritos[i].id.split('(')[0],
-							Freguesia: svgDoc.getElementsByClassName(test)[k]
+							Name: $tempConc[k].id,
+							Concelho: $tempDist[j],
+							Distrito: Distritos[i],
+							Freguesia: $tempConc[k]
 						});
-					else if (svgDoc.getElementsByClassName(test)[k].id in Exfregs)
+					else if ($tempConc[k].id in Exfregs)
+					{
 						exfregs.push({
-							Name: svgDoc.getElementsByClassName(test)[k].id,
-							Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
-							Distrito: Distritos[i].id.split('(')[0],
-							Freguesia: svgDoc.getElementsByClassName(test)[k]
+							Name: $tempConc[k].id,
+							Concelho: $tempDist[j],
+							Distrito: Distritos[i],
+							Freguesia: $tempConc[k]
 						});
-					else if (svgDoc.getElementsByClassName(test)[k].id in Locs)
+					}
+					else if ($tempConc[k].id in Locs)
 						locs.push({
-							Name: svgDoc.getElementsByClassName(test)[k].id,
-							Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
-							Distrito: Distritos[i].id.split('(')[0],
-							Localidade: svgDoc.getElementsByClassName(test)[k]
+							Name: $tempConc[k].id,
+							Concelho: $tempDist[j],
+							Distrito: Distritos[i],
+							Localidade: $tempConc[k]
 						});
 					fregsall.push({
-						Name: svgDoc.getElementsByClassName(test)[k].id,
-						Concelho: svgDoc.getElementsByClassName(strAux)[j].id.split('(')[0],
-						Distrito: Distritos[i].id.split('(')[0],
-						Freguesia: svgDoc.getElementsByClassName(test)[k]
+						Name: $tempConc[k].id,
+						Concelho: $tempDist[j],
+						Distrito: Distritos[i],
+						Freguesia: $tempConc[k]
 					});
 				}
 				concs.push({
-					Name: svgDoc.getElementsByClassName(strAux)[j].id,
-					Distrito: Distritos[i].id.split('(')[0],
-					Concelho: svgDoc.getElementsByClassName(strAux)[j],
-					Freguesias: svgDoc.getElementsByClassName(test)
+					Name: $tempDist[j].id,
+					Distrito: Distritos[i],
+					Concelho: $tempDist[j],
+					Freguesias: $tempConc,
 				});
 			}
 			dists.push({
-				Name: Distritos[i].id,
+				Name: Distritos[i].id.split('(')[0],
 				Distrito: Distritos[i],
-				Concelhos: svgDoc.getElementsByClassName(strAux),
-				Freguesias: svgDoc.getElementsByClassName("freg" + strAux.toLowerCase())
+				Concelhos: $map.find("." + strAux),
+				Freguesias: $map.find(".freg" + strAux.toLowerCase())
 			});
 		};
 		dp.push({
@@ -125,10 +140,12 @@ $(document).ready(function()
 				Id: Distritos[i].id
 			});
 		for (let i = 0; i < concs.length; i++)
+		{
 			dc.push({
 				Path: concs[i].Concelho.attributes[0].value,
 				Id: concs[i].Name
 			});
+		}
 		for (let i = 0; i < fregsall.length; i++)
 			if (!(fregsall[i].Name.includes('exfreg')))
 				df.push({
@@ -200,7 +217,7 @@ $(document).ready(function()
 
 		function filterItems(dist) {
 			return fregs.filter(function(el) {
-				return el.Distrito.toLowerCase() === dist.toLowerCase();
+				return el.Distrito.id.split('(')[0].toLowerCase() === dist.toLowerCase();
 			})
 		}
 
@@ -362,7 +379,7 @@ $(document).ready(function()
 												let select = document.createElement("select");
 												var optionAux = document.createElement("option");
 												optionAux.value = null;
-												optionAux.text = "";
+												optionAux.text = "Escolha uma opção:";
 												select.appendChild(optionAux);
 												for (let i = 0; i < fregPins.length; i += 2) {
 													var option = document.createElement("option");
