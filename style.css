@@ -1,6 +1,14 @@
+container, span {
+	font-size:24px;
+}
+
 path {
     stroke: black;
     pointer-events: all;
+}
+
+.map {
+	float:left;
 }
 
 .País {
