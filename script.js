@@ -48,12 +48,6 @@ $(function()
 			X: 0,
 			Y: 0
 		}
-		let tempBox2 = {
-			H: 0,
-			W: 0,
-			X: 0,
-			Y: 0
-		}
 		let loaded = [];
 		for (let q = 0; q < Pins.length; q++)
 			if (q % 2 === 0)
@@ -147,11 +141,10 @@ $(function()
 			});
 		}
 		for (let i = 0; i < fregsall.length; i++)
-			if (!(fregsall[i].Name.includes('exfreg')))
-				df.push({
-					Path: fregsall[i].Freguesia.attributes[0].value,
-					Id: fregsall[i].Name
-				});
+			df.push({
+				Path: fregsall[i].Freguesia.attributes[0].value,
+				Id: fregsall[i].Name
+			});
 		for (let i = 0; i < exfregs.length; i++)
 			def.push({
 				Path: exfregs[i].Freguesia.attributes[0].value,
@@ -642,8 +635,9 @@ $(function()
 
 		play.addEventListener("click", () => {
 			play.style.display = "none";
-			/*x = Math.floor((Math.random() * 278)+1);
-			goal = Concelhos[x].id;
+			console.log(locs);
+			/*x = Math.floor((Math.random() * fregsall.length)+1);
+			goal = fregsall[x].Name;
 			span.innerHTML = `Where is ${goal}?`;
 			guess = "";
 			tries = 3;
